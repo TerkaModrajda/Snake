@@ -813,49 +813,6 @@ function endGame() {
     }
 }
 
-// === AdSense Timed Ad ===
-function showTimedAd() {
-    if (document.getElementById('adsense-timed')) return;
-    const adDiv = document.createElement('div');
-    adDiv.id = 'adsense-timed';
-    adDiv.style.position = 'fixed';
-    adDiv.style.top = '50%';
-    adDiv.style.left = '50%';
-    adDiv.style.transform = 'translate(-50%, -50%)';
-    adDiv.style.zIndex = '99999';
-    adDiv.style.background = '#fff';
-    adDiv.style.boxShadow = '0 0 30px #000';
-    adDiv.style.padding = '16px 8px';
-    adDiv.style.borderRadius = '12px';
-    adDiv.innerHTML = `
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9868306421254175" crossorigin="anonymous"></script>
-        <ins class="adsbygoogle"
-            style="display:block;min-width:250px;min-height:100px;"
-            data-ad-client="ca-pub-9868306421254175"
-            data-ad-slot="1234567890"
-            data-ad-format="auto"
-            data-full-width-responsive="true"></ins>
-        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-    `;
-    document.body.appendChild(adDiv);
-    setTimeout(() => {
-        adDiv.remove();
-    }, 10000);
-}
-
-// Hook into game end logic
-const _endGame = window.endGame;
-window.endGame = function() {
-    _endGame && _endGame();
-    // Check games played
-    let gamesPlayed = parseInt(localStorage.getItem('adsenseGamesPlayed') || '0');
-    gamesPlayed++;
-    localStorage.setItem('adsenseGamesPlayed', gamesPlayed);
-    if (gamesPlayed % 3 === 0) {
-        showTimedAd();
-    }
-};
-
 // Tyto funkce jsou nyní v animations.js
 
 // Exporty pro globální dostupnost
