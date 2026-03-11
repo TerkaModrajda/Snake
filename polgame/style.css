@@ -1,0 +1,1522 @@
+/* Import retro pixelated font */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Press+Start+2P&display=swap');
+
+/* Reset a základní styly */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+body {
+    font-family: 'Press Start 2P', 'Courier New', monospace;
+    background: linear-gradient(45deg, #0a0a0a 0%, #0f1419 25%, #0a1a1a 50%, #0f1419 75%, #0a0a0a 100%);
+    background-size: 400% 400%;
+    animation: retroGradient 8s ease infinite;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 10px;
+    padding-top: 50px;
+    font-size: 8px;
+    line-height: 1.6;
+    position: relative;
+}
+
+@keyframes retroGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.main-layout {
+    display: flex;
+    gap: 20px;
+    max-width: 1400px;
+    width: 100%;
+    align-items: flex-start;
+    justify-content: center;
+    margin-top: -30px !important;
+}
+
+.game-container {
+    background: linear-gradient(145deg, #0f0f23 0%, #1a1a40 50%, #0f0f23 100%);
+    border: 4px solid #00ff00;
+    border-image: linear-gradient(45deg, #00ff00, #00cccc, #00ff00) 1;
+    box-shadow: 
+        0 0 20px #00ff00,
+        inset 0 0 20px rgba(0, 255, 0, 0.1),
+        0 4px 8px rgba(0, 0, 0, 0.6);
+    padding: 20px;
+    text-align: center;
+    flex: 2;
+    min-width: 600px;
+    max-width: 650px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Snake Game nadpis s žlutou barvou */
+.game-container h1 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 24px;
+    color: #ffff00;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+}
+
+.mechanics-container,
+.history-container {
+    background: linear-gradient(145deg, #0a0a1a 0%, #0f1420 50%, #0a0a1a 100%);
+    border: 3px solid #00ff41;
+    border-image: linear-gradient(45deg, #00ff41, #00ccaa, #00ff41) 1;
+    box-shadow: 
+        0 0 15px #00ff41,
+        inset 0 0 15px rgba(0, 255, 65, 0.1),
+        0 4px 8px rgba(0, 0, 0, 0.6);
+    padding: 15px;
+    flex: 1;
+    min-width: 300px;
+    max-width: 350px;
+    position: relative;
+    overflow: hidden;
+}
+
+
+.mechanics-container header,
+.history-container header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.mechanics-container h2,
+.history-container h2 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 14px;
+    margin-bottom: 15px;
+    color: #ffff00 !important;
+    text-shadow: 0 2px 4px #000;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-align: center;
+}
+
+.history-content {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.stats-section {
+    background: linear-gradient(145deg, #0a0a1a 0%, #0f1420 50%, #0a0a1a 100%);
+    border: 2px solid #00ff41;
+    padding: 15px;
+    box-shadow: 
+        0 0 10px #00ff41,
+        inset 0 0 10px rgba(0, 255, 65, 0.1);
+}
+
+.stats-section h3 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 12px;
+    margin-bottom: 15px;
+    color: #ffff00;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px dotted #00ff00;
+}
+
+.stat-item:last-child {
+    border-bottom: none;
+}
+
+.stat-item span:first-child {
+    color: #00ff00;
+    font-size: 10px;
+    text-transform: uppercase;
+}
+
+.stat-item span:last-child {
+    color: #00ccaa;
+    font-weight: bold;
+    font-size: 10px;
+}
+
+/* Historie her */
+.recent-games {
+    background: linear-gradient(145deg, #0a0a1a 0%, #0f1420 50%, #0a0a1a 100%);
+    border: 2px solid #00ff41;
+    padding: 15px;
+    box-shadow: 
+        0 0 10px #00ff41,
+        inset 0 0 10px rgba(0, 255, 65, 0.1);
+}
+
+.recent-games h3 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 12px;
+    margin-bottom: 15px;
+    color: #ffff00;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.history-list {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px dotted #00ff41;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+}
+
+.history-item:last-child {
+    border-bottom: none;
+}
+
+.game-number {
+    color: #00ccaa;
+    font-size: 10px;
+}
+
+.game-score {
+    color: #00ff41;
+    font-weight: bold;
+}
+
+.game-date {
+    color: #66ffaa;
+    font-size: 8px;
+}
+
+.no-games {
+    text-align: center;
+    color: #000000;
+    font-style: italic;
+    padding: 20px;
+}
+
+/* Úspěchy */
+.achievements {
+    background: linear-gradient(145deg, #0a0a1a 0%, #0f1420 50%, #0a0a1a 100%);
+    border: 2px solid #00ff41;
+    padding: 15px;
+    box-shadow: 
+        0 0 10px #00ff41,
+        inset 0 0 10px rgba(0, 255, 65, 0.1);
+}
+
+.achievements h3 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 12px;
+    margin-bottom: 15px;
+    color: #ffff00;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.achievements-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 8px;
+}
+
+.achievement {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 8px 4px;
+    transition: all 0.2s ease;
+    border: 2px solid #666666;
+    background: linear-gradient(145deg, #111111 0%, #222222 50%, #111111 100%);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    text-align: center;
+    aspect-ratio: 1;
+    min-height: 60px;
+    position: relative;
+}
+
+.achievement.locked {
+    background: linear-gradient(145deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
+    opacity: 0.7;
+    border-color: #555555;
+}
+
+.achievement.unlocked {
+    background: linear-gradient(145deg, #0a0a0a 0%, #0f2f0f 50%, #0a0a0a 100%);
+    border-color: #00ff41;
+    box-shadow: 0 0 15px #00ff41, 0 0 30px rgba(0, 255, 65, 0.4), inset 0 0 10px rgba(0, 255, 65, 0.1);
+    opacity: 1;
+    animation: achievementPulse 2s ease-in-out infinite;
+}
+
+@keyframes achievementPulse {
+    0%, 100% { 
+        box-shadow: 0 0 15px #00ff41, 0 0 30px rgba(0, 255, 65, 0.4), inset 0 0 10px rgba(0, 255, 65, 0.1);
+        transform: scale(1);
+    }
+    50% { 
+        box-shadow: 0 0 25px #00ff41, 0 0 50px rgba(0, 255, 65, 0.6), 0 0 75px rgba(0, 255, 65, 0.2), inset 0 0 15px rgba(0, 255, 65, 0.2);
+        transform: scale(1.08);
+    }
+}
+
+.achievement-icon {
+    font-size: 16px;
+    filter: grayscale(100%) contrast(3) brightness(0.6) saturate(0);
+    opacity: 0.5;
+    image-rendering: pixelated !important;
+    image-rendering: -moz-crisp-edges !important;
+    image-rendering: crisp-edges !important;
+    image-rendering: -webkit-crisp-edges !important;
+    transform: scale(1.4);
+    font-family: 'Courier New', 'Monaco', monospace !important;
+    -webkit-font-smoothing: none !important;
+    -moz-osx-font-smoothing: grayscale !important;
+    text-rendering: optimizeSpeed !important;
+    text-shadow: 1px 1px 0px #000000;
+}
+
+.achievement.unlocked .achievement-icon {
+    filter: contrast(3.5) brightness(0.8) saturate(3) drop-shadow(1px 1px 0px #000);
+    opacity: 1;
+    text-shadow: 1px 1px 0px #000000, 0 0 8px currentColor;
+    image-rendering: pixelated !important;
+    image-rendering: -moz-crisp-edges !important;
+    image-rendering: crisp-edges !important;
+    image-rendering: -webkit-crisp-edges !important;
+    -webkit-font-smoothing: none !important;
+    -moz-osx-font-smoothing: grayscale !important;
+}
+
+.achievement-text {
+    font-size: 6px;
+    color: #dddddd;
+    text-shadow: 1px 1px 0px #000000, 0 0 2px #000000;
+    line-height: 1.2;
+    word-break: break-all;
+    hyphens: auto;
+    font-weight: bold;
+}
+
+.achievement.unlocked .achievement-text {
+    color: #00ff41;
+}
+
+/* Hover efekt pro achievementy */
+.achievement:hover {
+    transform: translateY(-2px);
+    z-index: 10;
+}
+
+.achievement.unlocked:hover {
+    box-shadow: 0 0 30px #00ff41, 0 0 60px rgba(0, 255, 65, 0.7), 0 0 100px rgba(0, 255, 65, 0.3), inset 0 0 20px rgba(0, 255, 65, 0.3);
+    transform: translateY(-4px) scale(1.1);
+}
+
+/* Tooltip pro achievement při hover */
+.achievement:hover .achievement-text {
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(145deg, #000000 0%, #1a1a1a 100%);
+    border: 1px solid #00ff41;
+    padding: 4px 6px;
+    font-size: 5px;
+    white-space: nowrap;
+    z-index: 20;
+    box-shadow: 0 0 10px #00ff41;
+    word-break: normal;
+}
+
+.achievement.locked:hover .achievement-text {
+    border-color: #666666;
+    box-shadow: 0 0 5px #666666;
+}
+
+
+.unlock-condition {
+    display: block;
+    color: #95a5a6;
+    font-size: 12px;
+    font-style: italic;
+}
+
+.score-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.score, .high-score {
+    background: linear-gradient(145deg, #001100 0%, #002200 50%, #001100 100%);
+    padding: 8px 15px;
+    border: 2px solid #00ff41;
+    box-shadow: 
+        0 0 10px #00ff41,
+        inset 0 0 5px rgba(0, 255, 65, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.score > span:first-child, .high-score > span:first-child {
+    color: #0099ff;
+    font-size: 8px;
+}
+
+.score > span:last-child, .high-score > span:last-child {
+    color: #0099ff;
+    font-size: 12px;
+}
+
+.game-area {
+    position: relative;
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+}
+
+#gameCanvas {
+    background: #001100;
+    border: 4px solid #00ff00;
+    box-shadow: 
+        0 0 20px #00ff00,
+        inset 0 0 20px rgba(0, 255, 0, 0.1),
+        0 4px 8px rgba(0, 0, 0, 0.6);
+    max-width: 90vw;
+    max-height: 70vh;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+.game-over {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(145deg, #0a0a1a 0%, #0f1420 50%, #0a0a1a 100%);
+    color: #ffffff;
+    padding: 30px;
+    border: 3px solid #00ff41;
+    text-align: center;
+    box-shadow: 
+        0 0 30px #00ff41,
+        inset 0 0 20px rgba(0, 255, 65, 0.1),
+        0 10px 20px rgba(0, 0, 0, 0.8);
+    z-index: 10000;
+    font-family: 'Press Start 2P', monospace;
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    /* Zajisti, že popup neovlivní layout stránky */
+    margin: 0;
+    box-sizing: border-box;
+    pointer-events: auto;
+}
+
+.game-over h2 {
+    font-size: 16px;
+    margin-bottom: 15px;
+    color: #ff2d2d;
+    font-family: 'Press Start 2P', monospace;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 4px #000;
+}
+
+.game-over p {
+    font-size: 12px;
+    margin-bottom: 20px;
+    color: #ffffff;
+    font-family: 'Press Start 2P', monospace;
+    line-height: 1.6;
+}
+
+.hidden {
+    display: none;
+}
+
+.controls {
+    margin-top: 20px;
+}
+
+.controls h3 {
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+    color: #ffffff;
+}
+
+.control-keys {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.key-row {
+    display: flex;
+    gap: 10px;
+}
+
+.control-btn {
+    width: 50px;
+    height: 50px;
+    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 1.5rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.control-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+}
+
+.control-btn:active {
+    transform: scale(0.95);
+}
+
+#restart-btn {
+    background: #00ff41;
+    color: #000000;
+    border: 2px solid #00ff41;
+    padding: 16px 32px !important;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 16px !important;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin: 8px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: none;
+    box-shadow: 
+        0 0 10px #00ff41,
+        inset 0 0 5px rgba(0, 255, 65, 0.1);
+}
+
+#pause-btn {
+    background: linear-gradient(145deg, #00001a 0%, #000033 50%, #00001a 100%);
+    color: #0099ff;
+    border: 2px solid #0099ff;
+    padding: 10px 20px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin: 8px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 0px #000000;
+    box-shadow: 
+        0 0 10px #0099ff,
+        inset 0 0 5px rgba(0, 153, 255, 0.1);
+}
+
+.pause-button {
+    background: linear-gradient(145deg, #00001a 0%, #000033 50%, #00001a 100%);
+    color: #0099ff;
+    border: 2px solid #0099ff;
+    padding: 8px 16px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 
+        0 0 10px #0099ff,
+        inset 0 0 5px rgba(0, 153, 255, 0.1);
+    min-width: 80px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 0px #000000;
+}
+
+#restart-btn:hover {
+    background: #00dd33;
+    transform: translateY(-1px);
+    box-shadow: 
+        0 0 15px #00ff41,
+        inset 0 0 8px rgba(0, 255, 65, 0.2);
+    text-shadow: none;
+}
+
+.pause-button:hover {
+    background: linear-gradient(145deg, #000022 0%, #000044 50%, #000022 100%);
+    transform: translateY(-1px);
+    box-shadow: 
+        0 0 15px #0099ff,
+        inset 0 0 8px rgba(0, 153, 255, 0.2);
+    text-shadow: 1px 1px 0px #000000, 0 0 8px #0099ff;
+}
+
+#pause-btn {
+    background: linear-gradient(145deg, #001a00 0%, #003300 50%, #001a00 100%);
+    color: #00ff41;
+    border: 2px solid #00ff41;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 0px #000000;
+}
+
+#pause-btn:hover {
+    background: linear-gradient(145deg, #002200 0%, #004400 50%, #002200 100%);
+    box-shadow: 
+        0 0 15px #00ff41,
+        inset 0 0 8px rgba(0, 255, 65, 0.2);
+}
+
+.controls p {
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    color: #FFFFFF;
+    opacity: 0.8;
+}
+
+
+
+/* Tlačítko ZAČÍT HRÁT */
+.game-button {
+    background: #00ff41;
+    color: #000000;
+    border: 2px solid #00ff41;
+    padding: 16px 32px !important;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 16px !important;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin: 15px 0 10px 0;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: none;
+    box-shadow: 
+        0 0 10px #00ff41,
+        inset 0 0 5px rgba(0, 255, 65, 0.1);
+}
+
+.game-button:hover {
+    background: #00dd33;
+    border-color: #00dd33;
+    transform: translateY(-1px);
+    box-shadow: 
+        0 0 15px #00ff41,
+        inset 0 0 8px rgba(0, 255, 65, 0.2);
+    color: #000000;
+}
+
+/* Start hint text */
+.start-hint {
+    font-size: 7px;
+    color: #cccccc;
+    margin-top: 8px;
+    font-family: 'Press Start 2P', monospace;
+}
+
+.start-hint strong {
+    color: #ffff00;
+}
+
+/* Pixelated emoji a ikony */
+.emoji, .icon, 
+[class*="emoji"], [class*="icon"],
+.achievement-icon, .feature-icon, .speed-icon {
+    image-rendering: pixelated !important;
+    image-rendering: -moz-crisp-edges !important;
+    image-rendering: crisp-edges !important;
+    image-rendering: -webkit-crisp-edges !important;
+    image-rendering: -webkit-optimize-contrast !important;
+    font-family: 'Courier New', 'Monaco', monospace !important;
+    filter: contrast(2.5) brightness(0.8) saturate(1.8) !important;
+    text-rendering: optimizeSpeed !important;
+    -webkit-font-smoothing: none !important;
+    -moz-osx-font-smoothing: grayscale !important;
+    font-smooth: never !important;
+    transform: scale(1.2) !important;
+    display: inline-block !important;
+}
+
+/* Dodatečné pixelování pro všechna emoji v textu */
+body *:not(canvas):not(svg) {
+    text-rendering: optimizeSpeed;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    -webkit-font-smoothing: none;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Univerzální emoji pixelování */
+* {
+    image-rendering: pixelated !important;
+    image-rendering: -moz-crisp-edges !important;
+    image-rendering: crisp-edges !important;
+}
+
+/* Speciální pixelované font pro emoji */
+@supports (font-feature-settings: "liga" 0) {
+    .emoji, .icon, [class*="emoji"], [class*="icon"] {
+        font-feature-settings: "liga" 0, "clig" 0, "calt" 0;
+    }
+}
+
+/* Animace pro jídlo */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Animace pro skóre */
+@keyframes scoreUp {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+        color: #0099ff;
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.popup-content {
+    background: #001a33;
+    border: 3px solid #0099ff;
+    border-radius: 0px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 0 20px #0099ff;
+    max-width: 450px;
+    animation: popupFadeIn 0.5s ease;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+}
+
+.popup-content h2 {
+    color: #0099ff;
+    margin-bottom: 15px;
+    font-size: 14px;
+    font-family: 'Press Start 2P', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.popup-content p {
+    color: #ffffff;
+    margin-bottom: 10px;
+    font-size: 10px;
+    font-family: 'Press Start 2P', monospace;
+    line-height: 1.6;
+}
+
+.start-instructions {
+    background: linear-gradient(145deg, #000011 0%, #001133 50%, #000011 100%);
+    border: 1px solid #0066ff;
+    box-shadow: 0 0 8px #0066ff;
+    padding: 15px;
+    margin-top: 20px;
+}
+
+.start-instructions p:first-child {
+    color: #ffff00;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.start-instructions p:last-child {
+    color: #66ffff;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    margin-bottom: 0;
+    line-height: 1.6;
+}
+
+@keyframes popupFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+
+/* Animace pro urgentní stav (posledních 30% času) */
+.timer-urgent {
+    animation: timerUrgent 0.5s infinite;
+}
+
+@keyframes timerUrgent {
+    0%, 100% {
+        border-color: #0099ff;
+        color: #0099ff;
+    }
+    50% {
+        border-color: #00ccff;
+        color: #00ccff;
+        box-shadow: 0 0 15px #0099ff;
+    }
+}
+
+/* rychlost */
+.speed-info {
+    background: #001a33;
+    border: 2px solid #0099ff;
+    border-radius: 0px;
+    padding: 8px 15px;
+    margin: 10px 0;
+    text-align: center;
+    color: #0099ff;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 0px #000000;
+    animation: speedPulse 1.5s infinite;
+}
+
+.speed-info.hidden {
+    display: none;
+}
+
+.speed-icon {
+    font-size: 16px;
+    margin-right: 5px;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    filter: contrast(1.4) brightness(0.9);
+    font-family: monospace;
+    transform: scale(1.1);
+}
+
+@keyframes speedPulse {
+    0%, 100% {
+        box-shadow: 0 0 8px #0099ff;
+    }
+    50% {
+        box-shadow: 0 0 15px #0099ff;
+        border-color: #00ccff;
+    }
+}
+
+/* Animace pro ztrátu bodů - NOVÉ */
+@keyframes scoreDown {
+    0% {
+        transform: scale(1);
+        color: inherit;
+    }
+    50% {
+        transform: scale(0.8);
+        color: #e74c3c;
+    }
+    100% {
+        transform: scale(1);
+        color: #e74c3c;
+    }
+}
+
+/* Overlay styly - pro start-popup i game-over */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+    background-image: 
+        radial-gradient(circle at 25% 25%, #001122 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, #110022 0%, transparent 50%),
+        linear-gradient(45deg, transparent 40%, rgba(0, 255, 0, 0.05) 50%, transparent 60%);
+}
+
+.overlay.hidden {
+    display: none;
+}
+
+.overlay-content {
+    background: linear-gradient(145deg, #0a0a1a 0%, #0f1420 50%, #0a0a1a 100%);
+    padding: 20px;
+    text-align: center;
+    color: #00ff41;
+    box-shadow: 
+        0 0 30px #00ff41,
+        inset 0 0 20px rgba(0, 255, 65, 0.1),
+        0 10px 20px rgba(0, 0, 0, 0.8);
+    border: 3px solid #00ff41;
+    max-width: 700px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: retroPopupFadeIn 0.5s ease;
+    margin-top: -30px !important;
+    position: relative;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+}
+
+
+
+@keyframes retroPopupFadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.5) rotate(5deg);
+        filter: hue-rotate(180deg);
+    }
+    50% {
+        transform: scale(1.1) rotate(-2deg);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+        filter: hue-rotate(0deg);
+    }
+}
+
+.overlay-content h2 {
+    margin: 0 0 15px 0;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 16px;
+    color: #ffff00;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* Větší emoji ve start popup */
+.overlay-content h2 {
+    position: relative;
+}
+
+/* Zvětšení emoji herní konzole v tlačítku */
+.game-button {
+    position: relative;
+    padding-left: 40px;
+}
+
+.game-button::before {
+    content: none !important;
+}
+
+/* Zatmavení bočních panelů během hry */
+body.game-active .mechanics-container,
+body.game-active .history-container {
+    opacity: 0.3;
+    transition: opacity 0.3s ease;
+}
+
+body.game-active .mechanics-container:hover,
+body.game-active .history-container:hover {
+    opacity: 0.6;
+}
+
+/* Ztmavení obsahu prostředního containeru při game-over, ale zachování pozadí a layoutu */
+body.game-over .game-container .score-container,
+body.game-over .game-container .game-area,
+body.game-over .game-container .controls,
+body.game-over .game-container .start-hint {
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+}
+
+body.game-over .game-container:hover h1,
+body.game-over .game-container:hover .score-container,
+body.game-over .game-container:hover .game-area,
+body.game-over .game-container:hover .controls,
+body.game-over .game-container:hover .start-hint {
+    opacity: 0.1;
+}
+
+
+
+/* Když je současně game-active i game-over - udržuj layout, ale udělej viditelnější */
+body.game-active.game-over .mechanics-container,
+body.game-active.game-over .history-container {
+    opacity: 0,7;
+    transition: opacity 0.3s ease;
+}
+
+body.game-active.game-over .mechanics-container:hover,
+body.game-active.game-over .history-container:hover {
+    opacity: 1;
+}
+
+/* Zajištění, že game-over má vyšší prioritu než game-active pro obsah game-container */
+body.game-active.game-over .game-container h1,
+body.game-active.game-over .game-container .score-container,
+body.game-active.game-over .game-container .game-area,
+body.game-active.game-over .game-container .controls,
+body.game-active.game-over .game-container .start-hint {
+    opacity: 0.1;
+    transition: opacity 0.3s ease;
+}
+
+body.game-active.game-over .game-container:hover h1,
+body.game-active.game-over .game-container:hover .score-container,
+body.game-active.game-over .game-container:hover .game-area,
+body.game-active.game-over .game-container:hover .controls,
+body.game-active.game-over .game-container:hover .start-hint {
+    opacity: 0.9;
+}
+
+/* Skryj pouze specifické elementy */
+body.game-over #speed-info,
+body.game-over #game-notification {
+    display: none !important;
+}
+
+/* CRITICAL: Zablokuj responzivní chování během hry a game-over (FORCE DESKTOP LAYOUT) */
+body.game-active .main-layout,
+body.game-over .main-layout,
+body.game-active.game-over .main-layout {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    gap: 20px !important;
+    max-width: 1400px !important;
+    width: 100% !important;
+}
+body.game-active .game-container,
+body.game-over .game-container,
+body.game-active.game-over .game-container {
+    min-width: 600px !important;
+    max-width: 650px !important;
+    flex: 2 !important;
+    width: auto !important;
+}
+body.game-active .mechanics-container,
+body.game-active.game-over .mechanics-container,
+body.game-active.game-over .history-container {
+    min-width: 390px !important;
+    max-width: 400px !important;
+    flex: 1 !important;
+    width: auto !important;
+}
+/* --- END FORCE DESKTOP LAYOUT --- */
+
+/* Mechanics container specifické styly */
+.mechanics-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.mechanics-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: none;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.mechanic-item {
+    background: linear-gradient(145deg, #0a0a1a 0%, #0f1420 50%, #0a0a1a 100%);
+    border: 2px solid #00ff41;
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.2s ease;
+    font-family: 'Press Start 2P', monospace;
+    box-shadow: 
+        0 0 5px #00ff41,
+        inset 0 0 5px rgba(0, 255, 65, 0.1);
+}
+
+.mechanic-item:hover {
+    background: linear-gradient(145deg, #0f1f0f 0%, #1a2a1a 50%, #0f1f0f 100%);
+    transform: translateY(-1px);
+    box-shadow: 
+        0 0 10px #00ff41,
+        inset 0 0 8px rgba(0, 255, 65, 0.2);
+    border-color: #00ccaa;
+}
+
+.mechanic-icon {
+    font-size: 14px;
+    min-width: 16px;
+    text-align: center;
+}
+
+.mechanic-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+}
+
+.mechanic-text strong {
+    color: #ffff00;
+    font-size: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.mechanic-text span {
+    color: #00ff41;
+    font-size: 10px;
+    line-height: 1.2;
+}
+
+/* Scrollbar pro mechanics list */
+.mechanics-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.mechanics-list::-webkit-scrollbar-track {
+    background: #0a0a1a;
+    border-radius: 3px;
+}
+
+.mechanics-list::-webkit-scrollbar-thumb {
+    background: #00ff41;
+    border-radius: 3px;
+    box-shadow: 0 0 3px #00ff41;
+}
+
+.mechanics-list::-webkit-scrollbar-thumb:hover {
+    background: #00ccaa;
+}
+
+/* Styly pro skiny v popup oknech */
+.popup-skins-section {
+    margin: 24px 0;
+    padding: 15px;
+    background: linear-gradient(145deg, #0a0a0a 0%, #0f0f1a 50%, #0a0a0a 100%);
+    border: 2px solid #00ccaa;
+    border-radius: 10px;
+    box-shadow: 
+        0 0 10px #00ccaa,
+        inset 0 0 10px rgba(0, 204, 170, 0.1);
+}
+
+.popup-skins-section h3 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    color: #00ccaa;
+    margin-bottom: 15px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.popup-skins-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    max-height: none;
+    overflow-y: visible;
+}
+
+.popup-skins-grid .skin-item {
+    background: linear-gradient(145deg, #0a0a1a 0%, #0f1420 50%, #0a0a1a 100%);
+    border: 2px solid #00ff41;
+    padding: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    font-family: 'Press Start 2P', monospace;
+    box-shadow: 
+        0 0 5px #00ff41,
+        inset 0 0 5px rgba(0, 255, 65, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    /* Add skin preview image or styled div for each skin */
+    /* Example: <div class="skin-preview classic-skin"></div> */
+}
+
+/* Skin preview images/styles for each skin type */
+.classic-skin {
+    background: linear-gradient(90deg, #ffe0a3 0%, #ffe0a3 40%, #ffb84d 40%, #ffb84d 60%, #e74c3c 60%, #e74c3c 80%, #3498db 80%, #3498db 100%);
+    position: relative;
+    overflow: visible;
+}
+.classic-skin::before {
+    /* Hair (top brown) */
+    content: '';
+    position: absolute;
+    left: 12px;
+    top: -2px;
+    width: 6px;
+    height: 4px;
+    background: #8d5524;
+    border-radius: 2px 2px 0 0;
+}
+.classic-skin::after {
+    /* Eyes (two black dots) */
+    content: '';
+    position: absolute;
+    left: 13px;
+    top: 4px;
+    width: 2px;
+    height: 2px;
+    background: #222;
+    border-radius: 50%;
+    box-shadow: 4px 0 #222;
+}
+.classic-skin .bottom-decoration {
+    position: absolute;
+    left: 10px;
+    bottom: 2px;
+    width: 12px;
+    height: 4px;
+    display: flex;
+    justify-content: space-between;
+}
+.classic-skin .bottom-decoration .red {
+    width: 6px;
+    height: 100%;
+    background: #e74c3c;
+    border-radius: 0 0 2px 2px;
+}
+.classic-skin .bottom-decoration .blue {
+    width: 6px;
+    height: 100%;
+    background: #3498db;
+    border-radius: 0 0 2px 2px;
+}
+.rainbow-skin {
+    background: linear-gradient(90deg, #e74c3c, #f39c12, #f1c40f, #2ecc71, #3498db, #9b59b6);
+    background-size: 200% 100%;
+    animation: rainbow 2s linear infinite !important;
+}
+.neon-skin {
+    background: linear-gradient(90deg, #00ff41, #00d4aa);
+    box-shadow: 0 0 15px rgba(0, 255, 65, 0.5);
+}
+.golden-skin {
+    background: linear-gradient(90deg, #f1c40f, #f39c12);
+    box-shadow: 0 0 15px rgba(241, 196, 15, 0.5);
+}
+.fire-skin {
+    background: linear-gradient(90deg, #e74c3c, #c0392b);
+    box-shadow: 0 0 15px rgba(231, 76, 60, 0.5);
+}
+.ice-skin {
+    background: linear-gradient(90deg, #3498db, #74b9ff);
+    box-shadow: 0 0 15px rgba(52, 152, 219, 0.5);
+    border: 2px solid #74b9ff;
+}
+.purple-skin {
+    background: linear-gradient(90deg, #9b59b6, #a29bfe);
+    box-shadow: 0 0 15px rgba(155, 89, 182, 0.5);
+    border: 2px solid #a29bfe;
+}
+.galaxy-skin {
+    background: linear-gradient(90deg, #2d3436, #636e72, #2d3436);
+    background-size: 300% 100%;
+    animation: galaxy 3s ease-in-out infinite;
+    box-shadow: 0 0 15px rgba(45, 52, 54, 0.7);
+    border: 2px solid #636e72;
+}
+.diamond-skin {
+    background: linear-gradient(45deg, #ddd, #fff, #ddd, #fff);
+    background-size: 200% 200%;
+    animation: diamond 2s linear infinite;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+    border: 2px solid #fff;
+}
+
+.popup-skins-grid .skin-item:hover:not(.locked) {
+    background: linear-gradient(145deg, #0f1f0f 0%, #1a2a1a 50%, #0f1f0f 100%);
+    transform: translateY(-1px);
+    box-shadow: 
+        0 0 10px #00ff41,
+        inset 0 0 8px rgba(0, 255, 65, 0.2);
+    border-color: #00ccaa;
+}
+
+.popup-skins-grid .skin-item.active {
+    border-color: #00ccaa;
+    background: linear-gradient(145deg, #002211 0%, #004422 50%, #002211 100%);
+    box-shadow: 
+        0 0 15px #00ccaa,
+        inset 0 0 10px rgba(0, 204, 170, 0.2);
+}
+
+.popup-skins-grid .skin-item.locked {
+    opacity: 0.4;
+    cursor: not-allowed;
+    border-color: #666666;
+    box-shadow: none;
+}
+
+.popup-skins-grid .skin-preview {
+    width: 40px;
+    height: 15px;
+    margin: 0 auto;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.popup-skins-grid .skin-name {
+    display: block;
+    color: #ffff00;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.popup-skins-grid .unlock-condition {
+    display: block;
+    color: #ff6b6b;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    margin-top: 4px;
+}
+
+/* Responzivní design pro popup skiny */
+@media (max-width: 600px) {
+    .popup-skins-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+    
+    .popup-skins-section {
+        padding: 10px;
+    }
+    
+    .popup-skins-grid .skin-preview {
+        width: 35px;
+        height: 12px;
+    }
+}
+
+@keyframes rainbow {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+}
+
+/* --- FIX: Only left-align mechanics text, not items --- */
+.mechanic-text {
+    text-align: left !important;
+}
+body.game-over .mechanic-text,
+body.game-active .mechanic-text,
+body.game-active.game-over .mechanic-text {
+    text-align: left !important;
+}
+/* Remove forced alignment from containers */
+.mechanics-container,
+.mechanics-content,
+.mechanics-list,
+.mechanic-item {
+    /* Remove previous left alignment overrides */
+    /* ...existing code... */
+}
+
+/* --- Retro Arrow Key Visual for Start Popup --- */
+.start-arrows {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    margin-bottom: 18px;
+    margin-top: 8px;
+}
+.start-arrow {
+    font-size: 32px;
+    color: #00ff41;
+    background: #001a33;
+    border: 2px solid #00ff41;
+    border-radius: 8px;
+    box-shadow: 0 0 8px #00ff41, inset 0 0 4px rgba(0,255,65,0.2);
+    padding: 8px 14px;
+    font-family: 'Press Start 2P', monospace;
+    text-shadow: 1px 1px 0px #000, 0 0 6px #00ff41;
+    image-rendering: pixelated;
+}
+/* --- END Retro Arrow Key Visual --- */
+
+/* --- Retro Keypad Arrow Keys for Start Popup --- */
+.arrow-keypad {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 18px;
+    margin-top: 8px;
+    gap: 6px;
+}
+.arrow-key-row {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+}
+.arrow-key {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    color: #00ff41;
+    background: linear-gradient(145deg, #001a33 0%, #002244 100%);
+    border: 3px solid #00ff41;
+    border-radius: 8px;
+    box-shadow: 0 0 10px #00ff41, inset 0 0 6px rgba(0,255,65,0.2);
+    font-family: 'Press Start 2P', monospace;
+    text-shadow: 1px 1px 0px #000;
+    image-rendering: pixelated;
+    transition: background 0.2s, box-shadow 0.2s;
+    font-weight: bold;
+    -webkit-text-stroke:#00ff41;
+    letter-spacing: 0;
+}
+.arrow-key.arrow-left,
+.arrow-key.arrow-right {
+    font-weight: 900;
+    -webkit-text-stroke-width: 2.5px;
+}
+.arrow-key:active, .arrow-key:focus {
+    background: linear-gradient(145deg, #002244 0%, #001a33 100%);
+    box-shadow: 0 0 18px #00ff41, 0 0 8px #0099ff;
+    outline: none;
+}
+/* --- END Retro Keypad Arrow Keys --- */
+
+/* --- Volič (classic) skin preview --- */
+.skin-preview.classic-skin {
+    position: relative;
+    width: 60px;
+    height: 24px;
+    border-radius: 12px;
+    background: #fbe7c6;
+    border: 2px solid #222;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    margin: 0 auto;
+}
+.classic-hair-full {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 56px;
+    height: 8px;
+    background: #7c4a02;
+    border-radius: 15px 15px 5px 5px;
+    z-index: 2;
+}
+.classic-eyes {
+    position: absolute;
+    top: 10px; /* Move eyes down for more forehead */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 18px;
+    height: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 3;
+}
+.classic-eye {
+    width: 4px;
+    height: 4px;
+    background: #222;
+    border-radius: 50%;
+}
+.classic-bottom-vertical {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 8px;
+    display: flex;
+    flex-direction: row;
+    z-index: 2;
+}
+
+/* --- End Volič skin preview --- */
+
+/* --- Skin selection grid layout as in the image --- */
+.skins-selection-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto 1fr;
+    gap: 32px 24px; /* vertical and horizontal gap */
+    justify-content: center;
+    align-items: start;
+    width: 100%;
+    margin: 0 auto;
+}
+.skins-selection-grid .big-volic {
+    grid-column: 1 / span 3;
+    justify-self: center;
+    margin-bottom: 0;
+}
+.skins-selection-grid .skins-3x3 {
+    grid-column: 1 / span 3;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 24px;
+    justify-content: center;
+    align-items: center;
+}
+
+
+

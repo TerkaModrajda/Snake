@@ -1,0 +1,394 @@
+<!DOCTYPE lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Hra</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="main-layout">
+<!-- Levý panel - Herní mechaniky -->
+    <div class="mechanics-container">
+            <header>
+                <h2>👾 Herní mechaniky</h2>
+            </header>
+            <div class="mechanics-content">
+                <div class="mechanics-list">
+                    <div class="mechanic-item">
+                        <span class="mechanic-icon">🍎</span>
+                        <div class="mechanic-text">
+                            <strong>Progresivní jídlo</strong>
+                            <span>Více jídel s vyšší úrovní</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mechanic-item">
+                        <span class="mechanic-icon">⭐</span>
+                        <div class="mechanic-text">
+                            <strong>Super jídlo</strong>
+                            <span>Bonusové jídlo (+50 bodů)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mechanic-item">
+                        <span class="mechanic-icon">🏃</span>
+                        <div class="mechanic-text">
+                            <strong>Pohyblivé jídlo</strong>
+                            <span>Od 5. jídla se pohybuje</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mechanic-item">
+                        <span class="mechanic-icon">⏱️</span>
+                        <div class="mechanic-text">
+                            <strong>Časované jídlo</strong>
+                            <span>Mizí po 8 sekundách</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mechanic-item">
+                        <span class="mechanic-icon">⚡</span>
+                        <div class="mechanic-text">
+                            <strong>Zrychlování</strong>
+                            <span>Rychlost se zvyšuje</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mechanic-item">
+                        <span class="mechanic-icon">🐌</span>
+                        <div class="mechanic-text">
+                            <strong>Zpomalení</strong>
+                            <span>Bonus cooldown 20s</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mechanic-item">
+                        <span class="mechanic-icon">🧲</span>
+                        <div class="mechanic-text">
+                            <strong>Magnet</strong>
+                            <span>Přitahuje jídlo</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mechanic-item">
+                        <span class="mechanic-icon">🎆</span>
+                        <div class="mechanic-text">
+                            <strong>Food Frenzy</strong>
+                            <span>15 jídel na 10s</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mechanic-item">
+                        <span class="mechanic-icon">💀</span>
+                        <div class="mechanic-text">
+                            <strong>Penalizace</strong>
+                            <span>-50 bodů, zkrácení</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mechanic-item">
+                        <span class="mechanic-icon">🚀</span>
+                        <div class="mechanic-text">
+                            <strong>Zrychlení</strong>
+                            <span>Rychlejší pohyb 8s</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<!-- Prostřední panel - Hra -->        
+    <div class="game-container">
+        <header>
+            <h1>🐍 SNAKE GAME 🐍</h1>
+            <div class="score-container">
+                <div class="score">
+                    <span>Skóre: </span>
+                    <span id="current-score">0</span>
+                </div>
+                <button id="pause-btn" class="pause-button">Pauza</button>
+                <div class="high-score">
+                    <span>Nejlepší: </span>
+                    <span id="high-score">0</span>
+                </div>
+            </div>
+            <div id="speed-info" class="speed-info hidden">
+                    <span class="speed-icon">⚡</span>
+                    <span class="speed-text">Rychlost se zvyšuje!</span>
+            </div>
+        </header>
+        
+        <div class="game-area">
+            <canvas id="gameCanvas" width="600" height="600"></canvas>
+
+            <div id="start-popup" class="overlay">
+                <div class="overlay-content">
+                    <h2>SNAKE GAME</h2>
+                    
+                    <div class="popup-skins-section">
+                        <h3>🎨 Vyber si skin hada:</h3>
+                        <div class="popup-skins-grid" id="start-skins-grid">
+                            <div class="skin-item active" data-skin="classic">
+                                <div class="skin-preview classic-skin">
+                                    <div class="classic-hair-full"></div>
+                                    <div class="classic-eyes">
+                                        <div class="classic-eye"></div>
+                                        <div class="classic-eye"></div>
+                                    </div>
+                                    <div class="classic-bottom-vertical">
+                                        <div class="classic-bottom-vertical-left"></div>
+                                        <div class="classic-bottom-vertical-right"></div>
+                                    </div>
+                                </div>
+                                <span class="skin-name">Volič</span>
+                            </div>
+                            
+                            <div class="skin-item" data-skin="rainbow">
+                                <div class="skin-preview rainbow-skin"></div>
+                                <span class="skin-name">Duha</span>
+                                <span class="unlock-condition">🌈 50+</span>
+                            </div>
+                            
+                            <div class="skin-item" data-skin="neon">
+                                <div class="skin-preview neon-skin"></div>
+                                <span class="skin-name">Neon</span>
+                                <span class="unlock-condition">💡 100+</span>
+                            </div>
+                            
+                            <div class="skin-item locked" data-skin="golden">
+                                <div class="skin-preview golden-skin"></div>
+                                <span class="skin-name">Zlatý</span>
+                                <span class="unlock-condition">🏆 200+</span>
+                            </div>
+
+                            <div class="skin-item locked" data-skin="fire">
+                                <div class="skin-preview fire-skin"></div>
+                                <span class="skin-name">Ohnivý</span>
+                                <span class="unlock-condition">🔥 300+</span>
+                            </div>
+
+                            <div class="skin-item locked" data-skin="ice">
+                                <div class="skin-preview ice-skin"></div>
+                                <span class="skin-name">Ledový</span>
+                                <span class="unlock-condition">❄️ 400+</span>
+                            </div>
+
+                            <div class="skin-item locked" data-skin="purple">
+                                <div class="skin-preview purple-skin"></div>
+                                <span class="skin-name">Fialový</span>
+                                <span class="unlock-condition">💜 500+</span>
+                            </div>
+
+                            <div class="skin-item locked" data-skin="galaxy">
+                                <div class="skin-preview galaxy-skin"></div>
+                                <span class="skin-name">Galaxie</span>
+                                <span class="unlock-condition">🌌 750+</span>
+                            </div>
+
+                            <div class="skin-item locked" data-skin="diamond">
+                                <div class="skin-preview diamond-skin"></div>
+                                <span class="skin-name">Diamant</span>
+                                <span class="unlock-condition">💎 1000+</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="start-row-flex" style="display: flex; align-items: center; justify-content: center; gap: 32px; margin-bottom: 18px;">
+                        <div class="arrow-keypad">
+                            <div class="arrow-key-row">
+                                <span class="arrow-key">↑</span>
+                            </div>
+                            <div class="arrow-key-row">
+                                <span class="arrow-key">←</span>
+                                <span class="arrow-key">↓</span>
+                                <span class="arrow-key">→</span>
+                            </div>
+                        </div>
+                        <div class="game-instructions" style="text-align: left; min-width: 140px;">
+                            <p><strong>Ovládání:</strong></p>
+                            <p>↑↓←→ Šipky nebo tlačítka</p>
+                            <p>MEZERNÍK - Pauza</p>
+                            <p>ENTER - Start/Restart</p>
+                        </div>
+                    </div>
+
+                    <button class="game-button" onclick="startGame()">
+                        ZAČÍT HRÁT
+                    </button>
+                    <div class="start-hint">
+                        Nebo stiskni <strong>ENTER</strong>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        
+        <div class="controls">
+            <h3>Ovládání:</h3>
+            <div class="control-keys">
+                <div class="key-row">
+                    <button class="control-btn" data-direction="up">↑</button>
+                </div>
+                <div class="key-row">
+                    <button class="control-btn" data-direction="left">←</button>
+                    <button class="control-btn" data-direction="down">↓</button>
+                    <button class="control-btn" data-direction="right">→</button>
+                </div>
+            </div>
+            <p>Nebo použij šipky na klávesnici</p>
+            <p>Mezerník = Pauza</p>
+        </div>
+
+
+    </div>
+
+    <!-- Pravý panel - Historie -->
+    <div class="history-container">
+            <header>
+                <h2>📊 Historie skóre</h2>
+            </header>
+
+            <div class="history-content">
+                <div class="stats-section">
+                    <h3>🏆 Statistiky</h3>
+                    <div class="stat-item">
+                        <span>Celkem her:</span>
+                        <span id="total-games">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Průměrné skóre:</span>
+                        <span id="average-score">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Nejlepší série:</span>
+                        <span id="best-streak">0</span>
+                    </div>
+                </div>
+
+                <div class="achievements">
+                    <h3>🎯 Úspěchy</h3>
+                    <div id="achievements-list" class="achievements-list">
+                        <div class="achievement locked" data-achievement="first-game">
+                            <span class="achievement-icon">🎮</span>
+                            <span class="achievement-text">První hra</span>
+                        </div>
+                        <div class="achievement locked" data-achievement="score-100">
+                            <span class="achievement-icon">🌟</span>
+                            <span class="achievement-text">Skóre 100+</span>
+                        </div>
+                        <div class="achievement locked" data-achievement="score-500">
+                            <span class="achievement-icon">🔥</span>
+                            <span class="achievement-text">Skóre 500+</span>
+                        </div>
+                        <div class="achievement locked" data-achievement="score-1000">
+                            <span class="achievement-icon">🏆</span>
+                            <span class="achievement-text">Mistrovský<br> výkon</span>
+                        </div>
+                        <div class="achievement locked" data-achievement="long-snake">
+                            <span class="achievement-icon">🐍</span>
+                            <span class="achievement-text">Dlouhý had <br> 25+</span>
+                        </div>
+                        <div class="achievement locked" data-achievement="speed-demon">
+                            <span class="achievement-icon">⚡</span>
+                            <span class="achievement-text">Rychlý <br>blesk</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recent-games">
+                    <h3>🕐 Poslední hry</h3>
+                    <div id="game-history" class="history-list">
+                        <p class="no-games">Zatím žádné hry...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game-over popup - mimo layout kontejnery -->
+    <div id="game-over" class="game-over hidden">
+        <h2>Konec hry!</h2>
+        <p>Tvoje skóre: <span id="final-score">0</span></p>
+        
+        <div class="popup-skins-section">
+            <h3>🎨 Změň skin pro další hru:</h3>
+            <div class="popup-skins-grid" id="gameover-skins-grid">
+                <div class="skin-item active" data-skin="classic">
+                    <div class="skin-preview classic-skin">
+                        <div class="classic-hair-full"></div>
+                        <div class="classic-eyes">
+                            <div class="classic-eye"></div>
+                            <div class="classic-eye"></div>
+                        </div>
+                        <div class="classic-bottom-vertical">
+                            <div class="classic-bottom-vertical-left"></div>
+                            <div class="classic-bottom-vertical-right"></div>
+                        </div>
+                    </div>
+                    <span class="skin-name">Volič</span>
+                </div>
+                
+                <div class="skin-item" data-skin="rainbow">
+                    <div class="skin-preview rainbow-skin"></div>
+                    <span class="skin-name">Duha</span>
+                </div>
+                
+                <div class="skin-item" data-skin="neon">
+                    <div class="skin-preview neon-skin"></div>
+                    <span class="skin-name">Neon</span>
+                </div>
+                
+                <div class="skin-item locked" data-skin="golden">
+                    <div class="skin-preview golden-skin"></div>
+                    <span class="skin-name">Zlatý</span>
+                    <span class="unlock-condition">🏆 200+</span>
+                </div>
+
+                <div class="skin-item locked" data-skin="fire">
+                    <div class="skin-preview fire-skin"></div>
+                    <span class="skin-name">Ohnivý</span>
+                    <span class="unlock-condition">🔥 300+</span>
+                </div>
+
+                <div class="skin-item locked" data-skin="ice">
+                    <div class="skin-preview ice-skin"></div>
+                    <span class="skin-name">Ledový</span>
+                    <span class="unlock-condition">❄️ 400+</span>
+                </div>
+
+                <div class="skin-item locked" data-skin="purple">
+                    <div class="skin-preview purple-skin"></div>
+                    <span class="skin-name">Fialový</span>
+                    <span class="unlock-condition">💜 500+</span>
+                </div>
+
+                <div class="skin-item locked" data-skin="galaxy">
+                    <div class="skin-preview galaxy-skin"></div>
+                    <span class="skin-name">Galaxie</span>
+                    <span class="unlock-condition">🌌 750+</span>
+                </div>
+
+                <div class="skin-item locked" data-skin="diamond">
+                    <div class="skin-preview diamond-skin"></div>
+                    <span class="skin-name">Diamant</span>
+                    <span class="unlock-condition">💎 1000+</span>
+                </div>
+            </div>
+        </div>
+        
+        <button id="restart-btn">Hrát znovu</button>
+    </div>
+    
+    <!-- Původní struktura před migrací - správné pořadí -->
+    <script src="js/gameState.js"></script>
+    <script src="js/domElements.js"></script>
+    <script src="js/skins.js"></script>
+    <script src="js/movingFood.js"></script>
+    <script src="js/rendering.js"></script>
+    <script src="js/animations.js"></script>
+    <script src="js/timers.js"></script>
+    <script src="js/gameLogic.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

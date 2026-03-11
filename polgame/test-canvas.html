@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Canvas Test</title>
+</head>
+<body>
+    <canvas id="gameCanvas" width="600" height="600" style="border: 1px solid red;"></canvas>
+    
+    <script>
+        console.log("Test start");
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        console.log("Canvas:", canvas);
+        console.log("Context:", ctx);
+        
+        if (ctx) {
+            // Vymaž pozadí
+            ctx.fillStyle = '#34495e';
+            ctx.fillRect(0, 0, 600, 600);
+            
+            // Nakresli testovací čtverec (had)
+            ctx.fillStyle = '#27ae60';
+            ctx.fillRect(200, 200, 20, 20);
+            
+            // Nakresli testovací jídlo
+            ctx.fillStyle = '#e74c3c';
+            ctx.fillRect(300, 300, 20, 20);
+            
+            console.log("Test shapes drawn");
+        }
+    </script>
+</body>
+</html>
