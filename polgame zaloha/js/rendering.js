@@ -47,47 +47,59 @@ function draw() {
     
     // Vykreslení magnet efektu
     drawMagnetEffect();
+
+    // Vykreslení kamenů (rocks)
+    if (gameState.rocks && gameState.rocks.length > 0) {
+        drawRocks();
+    }
 }
 
 // NOVÁ funkce - vykreslení super jídla (2x2)
 function drawSuperFood() {
     const superFood = gameState.superFood;
-    
-    // Zlatá barva s blikáním
-    const time = Date.now();
-    const alpha = (Math.sin(time / 100) + 1) / 2;
-    const goldColor = `rgba(${241 + alpha * 14}, ${196 + alpha * 59}, ${15 + alpha * 240}, 1)`;
-    
-    // Vykreslení 4 čtverečků (2x2)
-    ctx.fillStyle = goldColor;
-    
-    for (let dx = 0; dx < 2; dx++) {
-        for (let dy = 0; dy < 2; dy++) {
-            const x = (superFood.x + dx) * GRID_SIZE;
-            const y = (superFood.y + dy) * GRID_SIZE;
-            
-            // Glowing efekt
-            ctx.shadowColor = goldColor;
-            ctx.shadowBlur = 15;
-            
-            ctx.fillRect(x + 1, y + 1, GRID_SIZE - 2, GRID_SIZE - 2);
+    const superFoodImg = window.superFoodImage || (window.superFoodImage = new Image());
+    if (!superFoodImg.src) superFoodImg.src = 'img/superFood.png';
+    // Vykresli obrázek 2x2 grid (zabírá 2x2 políčka)
+    const x = superFood.x * GRID_SIZE;
+    const y = superFood.y * GRID_SIZE;
+    const size = GRID_SIZE * 2;
+    if (superFoodImg.complete && superFoodImg.naturalWidth > 0) {
+        ctx.drawImage(
+            superFoodImg,
+            x,
+            y,
+            size,
+            size
+        );
+    } else {
+        // Fallback: původní zlaté čtverečky
+        const time = Date.now();
+        const alpha = (Math.sin(time / 100) + 1) / 2;
+        const goldColor = `rgba(${241 + alpha * 14}, ${196 + alpha * 59}, ${15 + alpha * 240}, 1)`;
+        ctx.fillStyle = goldColor;
+        for (let dx = 0; dx < 2; dx++) {
+            for (let dy = 0; dy < 2; dy++) {
+                ctx.shadowColor = goldColor;
+                ctx.shadowBlur = 15;
+                ctx.fillRect(
+                    (superFood.x + dx) * GRID_SIZE + 1,
+                    (superFood.y + dy) * GRID_SIZE + 1,
+                    GRID_SIZE - 2,
+                    GRID_SIZE - 2
+                );
+            }
         }
+        ctx.shadowBlur = 0;
+        // Hvězdička uprostřed
+        const centerX = (superFood.x + 0.5) * GRID_SIZE + GRID_SIZE / 2;
+        const centerY = (superFood.y + 0.5) * GRID_SIZE + GRID_SIZE / 2;
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 20px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('★', centerX, centerY + 6);
     }
-    
-    // Resetuj shadow
-    ctx.shadowBlur = 0;
-    
     // Timer kruh kolem super jídla
     drawSuperFoodTimer();
-    
-    // Hvězdička uprostřed
-    const centerX = (superFood.x + 0.5) * GRID_SIZE + GRID_SIZE / 2;
-    const centerY = (superFood.y + 0.5) * GRID_SIZE + GRID_SIZE / 2;
-    
-    ctx.fillStyle = '#fff';
-    ctx.font = 'bold 20px Arial';
-    ctx.textAlign = 'center';
-    ctx.fillText('★', centerX, centerY + 6);
 }
 
 // Timer pro super jídlo
@@ -184,11 +196,87 @@ function drawSingleBonus(bonus) {
     // Symbol uprostřed
     const centerX = bonus.x * GRID_SIZE + GRID_SIZE / 2;
     const centerY = bonus.y * GRID_SIZE + GRID_SIZE / 2;
-    
-    ctx.fillStyle = '#fff';
-    ctx.font = 'bold 18px Arial';
-    ctx.textAlign = 'center';
-    ctx.fillText(emoji, centerX, centerY + 4);
+    if (bonusType === 'slow') {
+        // Draw slow.png instead of emoji
+        const slowImg = window.slowImage || (window.slowImage = new Image());
+        if (!slowImg.src) slowImg.src = 'img/slow.png';
+        const imgSize = GRID_SIZE - 4; // Zvětšeno z -10 na -4 pro podobnou velikost jako jídlo
+        if (slowImg.complete && slowImg.naturalWidth > 0) {
+            ctx.drawImage(slowImg, centerX - imgSize/2, centerY - imgSize/2, imgSize, imgSize);
+        } else {
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 18px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('🐌', centerX, centerY + 4);
+        }
+    } else if (bonusType === 'frenzy') {
+        // Draw a readable background for the frenzy bonus icon
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, GRID_SIZE / 2 - 4, 0, 2 * Math.PI);
+        ctx.fillStyle = 'rgba(0,0,0,0.85)'; // dark background for contrast
+        ctx.shadowColor = '#e67e22';
+        ctx.shadowBlur = 12;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.restore();
+        // Draw frenzy.png instead of emoji
+        const frenzyImg = window.frenzyImage || (window.frenzyImage = new Image());
+        if (!frenzyImg.src) frenzyImg.src = 'img/frenzy.png';
+        const imgSize = GRID_SIZE - 4; // Zvětšeno z -10 na -4 pro podobnou velikost jako jídlo
+        if (frenzyImg.complete && frenzyImg.naturalWidth > 0) {
+            ctx.drawImage(frenzyImg, centerX - imgSize/2, centerY - imgSize/2, imgSize, imgSize);
+        } else {
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 18px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('🍎', centerX, centerY + 4);
+        }
+    } else if (bonusType === 'magnet') {
+        // Draw magnet.png instead of emoji
+        const magnetImg = window.magnetImage || (window.magnetImage = new Image());
+        if (!magnetImg.src) magnetImg.src = 'img/magnet.png';
+        const imgSize = GRID_SIZE - 4; // Zvětšeno z -10 na -4 pro podobnou velikost jako jídlo
+        if (magnetImg.complete && magnetImg.naturalWidth > 0) {
+            ctx.drawImage(magnetImg, centerX - imgSize/2, centerY - imgSize/2, imgSize, imgSize);
+        } else {
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 18px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('🧲', centerX, centerY + 4);
+        }
+    } else if (bonusType === 'speed') {
+        // Draw speedReal.png instead of emoji
+        const speedImg = window.speedImage || (window.speedImage = new Image());
+        if (!speedImg.src) speedImg.src = 'img/speedReal.png';
+        const imgSize = GRID_SIZE - 4; // Stejná velikost jako ostatní bonusy
+        if (speedImg.complete && speedImg.naturalWidth > 0) {
+            ctx.drawImage(speedImg, centerX - imgSize/2, centerY - imgSize/2, imgSize, imgSize);
+        } else {
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 18px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('⚡', centerX, centerY + 4);
+        }
+    } else if (bonusType === 'penalty') {
+        // Draw penalization.png instead of emoji
+        const penaltyImg = window.penaltyImage || (window.penaltyImage = new Image());
+        if (!penaltyImg.src) penaltyImg.src = 'img/penalization.png';
+        const imgSize = GRID_SIZE - 4; // Stejná velikost jako ostatní bonusy
+        if (penaltyImg.complete && penaltyImg.naturalWidth > 0) {
+            ctx.drawImage(penaltyImg, centerX - imgSize/2, centerY - imgSize/2, imgSize, imgSize);
+        } else {
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 18px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('💸', centerX, centerY + 4);
+        }
+    } else {
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 18px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(emoji, centerX, centerY + 4);
+    }
 }
 
 // Timer pro bonus
@@ -254,35 +342,42 @@ function drawFrenzyFoods() {
     if (gameState.frenzyFoods.length > 0) {
         console.log(`[RENDER] Kreslím ${gameState.frenzyFoods.length} frenzy jídel`);
     }
+    // Use silenstvi.png for frenzy foods
+    const silenstviImg = window.silenstviImage || (window.silenstviImage = new Image());
+    if (!silenstviImg.src) silenstviImg.src = 'img/silenstvi.png';
     gameState.frenzyFoods.forEach(food => {
-        // Zlatá barva s blikáním pro frenzy jídla
-        const time = Date.now();
-        const alpha = (Math.sin(time / 100) + 1) / 2; // Rychlejší blikání
-        const goldColor = `rgba(${255}, ${215 + alpha * 40}, ${0 + alpha * 100}, 1)`;
-        
-        // Glow efekt
-        ctx.shadowColor = goldColor;
+        const x = food.x * GRID_SIZE + 2;
+        const y = food.y * GRID_SIZE + 2;
+        const size = GRID_SIZE - 4;
+        // Draw readable background behind the image
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(x + size/2, y + size/2, size/2, 0, 2 * Math.PI);
+        ctx.fillStyle = 'rgba(0,0,0,0.85)';
+        ctx.shadowColor = '#e67e22';
         ctx.shadowBlur = 10;
-        
-        ctx.fillStyle = goldColor;
-        ctx.fillRect(
-            food.x * GRID_SIZE + 2,
-            food.y * GRID_SIZE + 2,
-            GRID_SIZE - 4,
-            GRID_SIZE - 4
-        );
-        
-        // Resetuj shadow
+        ctx.fill();
         ctx.shadowBlur = 0;
-        
-        // Přidej golden sparkle efekt
-        const centerX = food.x * GRID_SIZE + GRID_SIZE / 2;
-        const centerY = food.y * GRID_SIZE + GRID_SIZE / 2;
-        
-        ctx.fillStyle = '#fff';
-        ctx.font = 'bold 12px Arial';
-        ctx.textAlign = 'center';
-        ctx.fillText('💰', centerX, centerY + 3);
+        ctx.restore();
+        if (silenstviImg.complete && silenstviImg.naturalWidth > 0) {
+            ctx.drawImage(silenstviImg, x, y, size, size);
+        } else {
+            // Fallback: gold color with sparkle
+            const time = Date.now();
+            const alpha = (Math.sin(time / 100) + 1) / 2;
+            const goldColor = `rgba(${255}, ${215 + alpha * 40}, ${0 + alpha * 100}, 1)`;
+            ctx.shadowColor = goldColor;
+            ctx.shadowBlur = 10;
+            ctx.fillStyle = goldColor;
+            ctx.fillRect(x, y, size, size);
+            ctx.shadowBlur = 0;
+            const centerX = food.x * GRID_SIZE + GRID_SIZE / 2;
+            const centerY = food.y * GRID_SIZE + GRID_SIZE / 2;
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 12px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('💰', centerX, centerY + 3);
+        }
     });
 }
 
@@ -357,24 +452,18 @@ function drawSnake() {
     
     const skin = snakeSkins[gameState.currentSkin];
     gameState.snake.forEach((segment, index) => {
-        if (gameState.currentSkin === 'classic') {
-            // Volič skin: první blok je skin color, ostatní zelené
-            if (index === 0) {
-                ctx.fillStyle = '#fbe7c6'; // skin color
-            } else if (index === gameState.snake.length - 1 && gameState.snake.length > 1) {
-                ctx.fillStyle = '#222'; // black shoes
-            } else {
-                ctx.fillStyle = '#2ecc71'; // light green
-        }
-        } else if (skin.isRainbow) {
+        // Speciální efekt pro rainbow skin
+        if (skin.isRainbow) {
             const rainbowColors = ['#e74c3c', '#f39c12', '#f1c40f', '#2ecc71', '#3498db', '#9b59b6'];
             const colorIndex = (index + Math.floor(Date.now() / 200)) % rainbowColors.length;
             ctx.fillStyle = rainbowColors[colorIndex];
         } else if (skin.isGalaxy) {
+            // Galaxy efekt - tmavé barvy s hvězdami
             const galaxyColors = ['#2d3436', '#636e72', '#74b9ff', '#0984e3'];
             const colorIndex = (index + Math.floor(Date.now() / 300)) % galaxyColors.length;
             ctx.fillStyle = galaxyColors[colorIndex];
         } else if (skin.isDiamond) {
+            // Diamond efekt - blikající bílé/stříbrné
             const diamondColors = ['#fff', '#ddd', '#ecf0f1', '#bdc3c7'];
             const colorIndex = (index + Math.floor(Date.now() / 150)) % diamondColors.length;
             ctx.fillStyle = diamondColors[colorIndex];
@@ -408,27 +497,24 @@ function drawSnake() {
 // Vykreslení očí hada
 function drawSnakeEyes(segment) {
     ctx.fillStyle = '#fff';
-    if (gameState.currentSkin === 'classic') {
-        eyeColor = '#222';
-    }
-    ctx.fillStyle = eyeColor;
     const eyeSize = 3;
     const eyeOffset = 5;
     
-    if (gameState.direction.x === 1) {
+    if (gameState.direction.x === 1) { // Doprava
         ctx.fillRect(segment.x * GRID_SIZE + GRID_SIZE - eyeOffset, segment.y * GRID_SIZE + eyeOffset, eyeSize, eyeSize);
         ctx.fillRect(segment.x * GRID_SIZE + GRID_SIZE - eyeOffset, segment.y * GRID_SIZE + GRID_SIZE - eyeOffset - eyeSize, eyeSize, eyeSize);
-    } else if (gameState.direction.x === -1) {
+    } else if (gameState.direction.x === -1) { // Doleva
         ctx.fillRect(segment.x * GRID_SIZE + 2, segment.y * GRID_SIZE + eyeOffset, eyeSize, eyeSize);
         ctx.fillRect(segment.x * GRID_SIZE + 2, segment.y * GRID_SIZE + GRID_SIZE - eyeOffset - eyeSize, eyeSize, eyeSize);
-    } else if (gameState.direction.y === 1) {
+    } else if (gameState.direction.y === 1) { // Dolů
         ctx.fillRect(segment.x * GRID_SIZE + eyeOffset, segment.y * GRID_SIZE + GRID_SIZE - eyeOffset, eyeSize, eyeSize);
         ctx.fillRect(segment.x * GRID_SIZE + GRID_SIZE - eyeOffset - eyeSize, segment.y * GRID_SIZE + GRID_SIZE - eyeOffset, eyeSize, eyeSize);
-    } else if (gameState.direction.y === -1) {
+    } else if (gameState.direction.y === -1) { // Nahoru
         ctx.fillRect(segment.x * GRID_SIZE + eyeOffset, segment.y * GRID_SIZE + 2, eyeSize, eyeSize);
         ctx.fillRect(segment.x * GRID_SIZE + GRID_SIZE - eyeOffset - eyeSize, segment.y * GRID_SIZE + 2, eyeSize, eyeSize);
     }
 }
+
 // Vykreslení jídla
 function drawFood() {
     if (!gameState.food) {
@@ -448,55 +534,35 @@ function drawFood() {
 
 // Vykreslení jednoho jídla
 function drawSingleFood(food, isMainFood = true) {
-    // Všechna jídla mají stejnou základní červenou barvu
-    let foodColor = '#e74c3c';
-    
-    // Speciální barva pro pohybující se jídlo - stejná pro všechna jídla
-    if (gameState.movingFood) {
-        const time = Date.now();
-        const alpha = (Math.sin(time / 200) + 1) / 2;
-        foodColor = `rgba(${231 + alpha * 24}, ${76 + alpha * 100}, ${60 + alpha * 195}, 1)`;
-        
-        // Trail efekt pro pohybující se jídlo
-        if (food.direction && (food.direction.x !== 0 || food.direction.y !== 0)) {
-            ctx.save();
-            ctx.globalAlpha = 0.3;
-            ctx.fillStyle = foodColor;
-            ctx.fillRect(
-                (food.x - food.direction.x) * GRID_SIZE + 6,
-                (food.y - food.direction.y) * GRID_SIZE + 6,
-                GRID_SIZE - 12,
-                GRID_SIZE - 12
-            );
-            ctx.restore();
-        }
+    // Použij obrázek místo červeného čtverce
+    const foodImg = window.foodImage || (window.foodImage = new Image());
+    if (!foodImg.src) foodImg.src = 'img/food.png';
+    let padding = 2;
+    // Pokud obrázek je načten, vykresli ho, jinak fallback na červený čtverec
+    if (foodImg.complete && foodImg.naturalWidth > 0) {
+        ctx.drawImage(
+            foodImg,
+            food.x * GRID_SIZE + padding,
+            food.y * GRID_SIZE + padding,
+            GRID_SIZE - (padding * 2),
+            GRID_SIZE - (padding * 2)
+        );
+    } else {
+        ctx.fillStyle = '#e74c3c';
+        ctx.fillRect(
+            food.x * GRID_SIZE + padding,
+            food.y * GRID_SIZE + padding,
+            GRID_SIZE - (padding * 2),
+            GRID_SIZE - (padding * 2)
+        );
     }
-    
-    // Velikost jídla - všechna jídla stejně velká
-    let padding = 2; // Všechna jídla budou velká
-    
-    // Vykreslení jídla
-    ctx.fillStyle = foodColor;
-    ctx.fillRect(
-        food.x * GRID_SIZE + padding,
-        food.y * GRID_SIZE + padding,
-        GRID_SIZE - (padding * 2),
-        GRID_SIZE - (padding * 2)
-    );
-    
     // Směrová šipka (jen pro hlavní jídlo a jen do 8. jídla)
     if (gameState.movingFood && gameState.foodEaten < GAME_CONFIG.PROGRESSION.ARROW_HIDE && isMainFood) {
         drawFoodDirectionArrow(food);
     }
-    
     // Timer pro časované jídlo - pro všechna jídla
     if (gameState.timedFood) {
         drawFoodTimer(food);
-        
-        const timePercent = Math.max(0, gameState.foodTimer / gameState.foodMaxTime);
-        if (timePercent <= 0.2) {
-            drawUrgentWarning(food);
-        }
     }
 }
 
@@ -602,6 +668,36 @@ function clearCanvas() {
     
     ctx.font = '24px Arial';
     ctx.fillText('Stiskni ENTER pro restart', CANVAS_SIZE / 2, CANVAS_SIZE / 2 + 50);
+}
+
+// Funkce pro vykreslení kamenů
+function drawRocks() {
+    ctx.save();
+    const rockImg = window.rockImage || (window.rockImage = new Image());
+    if (!rockImg.src) rockImg.src = 'img/rock.png';
+    for (let rock of gameState.rocks) {
+        const x = rock.x * GRID_SIZE;
+        const y = rock.y * GRID_SIZE;
+        // Pokud obrázek je načten, vykresli ho, jinak fallback na šedý čtverec
+        if (rockImg.complete && rockImg.naturalWidth > 0) {
+            ctx.drawImage(
+                rockImg,
+                x + 2,
+                y + 2,
+                GRID_SIZE - 4,
+                GRID_SIZE - 4
+            );
+        } else {
+            ctx.fillStyle = '#888';
+            ctx.strokeStyle = '#444';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.rect(x + 2, y + 2, GRID_SIZE - 4, GRID_SIZE - 4);
+            ctx.fill();
+            ctx.stroke();
+        }
+    }
+    ctx.restore();
 }
 
 // Exporty a aliasy pro kompatibilitu

@@ -15,8 +15,8 @@ const GAME_CONFIG = {
         GRID_COUNT: 30
     },
     SPEED: {
-        BASE_SPEED: 150,
-        SLOW_BONUS_INCREASE: 20,
+        BASE_SPEED: 200, // Kompromis mezi 150 a 280 - rozumný začátek
+        SLOW_BONUS_INCREASE: 80, // Zvětšeno z 20 na 80 pro výraznější zpomalení
         SPEED_INCREMENT: 10,
         MIN_SPEED: 50,
         FOOD_MOVE_SPEED: 2000 // Pohyb jídla každé 2 sekundy
@@ -90,7 +90,7 @@ let gameState = {
     foodMoveSpeed: GAME_CONFIG.SPEED.FOOD_MOVE_SPEED,
     
     // Skiny
-    currentSkin: localStorage.getItem('snakeCurrentSkin') || 'classic',
+    currentSkin: 'classic',
     
     // Super jídlo (z config.js)
     superFood: null,
@@ -108,6 +108,7 @@ let gameState = {
     bonusEffectTimer: 0,
     bonusEffectDuration: GAME_CONFIG.TIMINGS.BONUS_EFFECT,
     bonusCooldownTimer: 0,
+    lastActiveBonusType: null, // Pro sledování změn bonusových typů
     bonusCooldown: 1000, // Kratší cooldown při startu
     speedBeforeBonus: 0,
     lastBonusSpawn: 0,
@@ -125,7 +126,13 @@ let gameState = {
     frenzyDuration: GAME_CONFIG.TIMINGS.FRENZY_DURATION,
 
     frenzyFoods: [],
-    normalFoodCountBeforeFrenzy: 0
+    normalFoodCountBeforeFrenzy: 0,
+
+    // Skály - nové proměnné pro překážky
+    rocks: [], // Pole pozic skal {x, y}
+    rockCount: 0, // Aktuální počet skal
+    lastRockMoveTime: 0, // Čas posledního pohybu skály
+    rockStage: 0 // 0: žádná, 1: 1 skála, 2: 3 skály, 3: 5 skal
 };
 
 // Skiny definice
@@ -140,16 +147,14 @@ const snakeSkins = {
         name: 'Duha',
         head: '#e74c3c',
         body: '#f39c12',
-        unlocked: false, // now locked by default
-        unlockCondition: 50, // unlock at 50+ score
+        unlocked: true,
         isRainbow: true
     },
     neon: {
         name: 'Neon',
         head: '#00ff41',
         body: '#00d4aa',
-        unlocked: false, // now locked by default
-        unlockCondition: 100, // unlock at 100+ score
+        unlocked: true,
         glowing: true
     },
     golden: {
@@ -219,3 +224,79 @@ window.CANVAS_SIZE = CANVAS_SIZE;
 window.GRID_SIZE = GRID_SIZE;
 window.GRID_COUNT = GRID_COUNT;
 window.GAME_CONFIG = GAME_CONFIG;
+
+function initGame() {
+    // Reset herního stavu
+    gameState.snake = [{ x: 10, y: 10 }];
+    gameState.food = { x: 5, y: 5, direction: { x: 0, y: 0 }, lastMoveTime: 0 };
+    gameState.foods = [];
+    gameState.multiFood = false;
+    gameState.direction = { x: 0, y: 0 };
+    gameState.score = 0;
+    gameState.gameRunning = false;
+    gameState.gamePaused = false;
+    gameState.gameStarted = false;
+    gameState.foodEaten = 0;
+
+    // Rychlost a timing (z config.js)
+    gameState.gameSpeed = GAME_CONFIG.SPEED.BASE_SPEED;
+    gameState.baseSpeed = GAME_CONFIG.SPEED.BASE_SPEED;
+    gameState.speedIncrement = GAME_CONFIG.SPEED.SPEED_INCREMENT;
+    gameState.minSpeed = GAME_CONFIG.SPEED.MIN_SPEED;
+    gameState.lastUpdateTime = 0;
+    gameState.lastMoveTime = 0;
+
+    // Časované jídlo
+    gameState.timedFood = false;
+    gameState.foodTimer = 0;
+    gameState.foodMaxTime = GAME_CONFIG.TIMINGS.FOOD_MAX_TIME;
+
+    // Pohybující se jídlo
+    gameState.movingFood = false;
+    gameState.foodMoveSpeed = GAME_CONFIG.SPEED.FOOD_MOVE_SPEED;
+
+    // Skiny
+    gameState.currentSkin = 'classic';
+
+    // Super jídlo (z config.js)
+    gameState.superFood = null;
+    gameState.superFoodActive = false;
+    gameState.superFoodTimer = 0;
+    gameState.superFoodMaxTime = GAME_CONFIG.TIMINGS.SUPER_FOOD_DURATION;
+    gameState.superFoodSpawnInterval = GAME_CONFIG.TIMINGS.SUPER_FOOD_INTERVAL;
+    gameState.lastSuperFoodSpawn = 0;
+
+    // Bonus zpomalení (z config.js)
+    gameState.slowBonus = null;
+    // Bonusový systém (více bonusů současně)
+    gameState.bonuses = []; // Pole aktivních bonusů na mapě
+    gameState.bonusEffectActive = false;
+    gameState.bonusEffectTimer = 0;
+    gameState.bonusEffectDuration = GAME_CONFIG.TIMINGS.BONUS_EFFECT;
+    gameState.bonusCooldownTimer = 0;
+    gameState.lastActiveBonusType = null;
+    gameState.bonusCooldown = 1000; // Kratší cooldown při startu
+    gameState.speedBeforeBonus = 0;
+    gameState.lastBonusSpawn = 0;
+    gameState.maxBonusesOnMap = 1; // Dynamicky se změní na 2 od 25. jídla
+    gameState.bonusType = null; // typ aktuálního bonusu
+
+    // Magnet efekt specifické proměnné
+    gameState.magnetEffectActive = false;
+    gameState.magnetEffectStartTime = 0;
+    gameState.magnetAnimations = [];
+
+    // Food Frenzy systém
+    gameState.frenzyActive = false;
+    gameState.frenzyTimer = 0;
+    gameState.frenzyDuration = GAME_CONFIG.TIMINGS.FRENZY_DURATION;
+
+    gameState.frenzyFoods = [];
+    gameState.normalFoodCountBeforeFrenzy = 0;
+
+    // Skály - nové proměnné pro překážky
+    gameState.rocks = [];
+    gameState.rockCount = 0;
+    gameState.lastRockMoveTime = 0;
+    gameState.rockStage = 0;
+}

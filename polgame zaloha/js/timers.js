@@ -38,6 +38,9 @@ function updateTimers(currentTime) {
     // NOVÉ - Správa Food Frenzy (vždy, aby fungoval countdown)
     manageFoodFrenzy(currentTime);
     
+    // === Správa kamenů (rocks) ===
+    manageRocks(currentTime);
+    
     moveFoodIfNeeded(currentTime);
     gameState.lastUpdateTime = currentTime;
 }
@@ -203,11 +206,16 @@ function manageFoodFrenzy(currentTime) {
 
 // Spuštění Food Frenzy
 function startFoodFrenzy() {
-    if (gameState.frenzyActive) return;
+    if (gameState.frenzyActive) {
+        // Pokud je frenzy už aktivní, pouze resetuj timer
+        gameState.frenzyTimer = gameState.frenzyDuration; // Reset na plných 10 sekund
+        console.log(`[FRENZY] Frenzy prodlouženo - timer resetován na ${gameState.frenzyDuration / 1000}s`);
+        return;
+    }
     
     console.log("Spouští se Food Frenzy!");
     
-    // Aktivuj frenzy
+    // Aktivuj nový frenzy
     gameState.frenzyActive = true;
     gameState.frenzyTimer = gameState.frenzyDuration; // 10 sekund
     
@@ -295,15 +303,14 @@ function penalizeMissedFood() {
     if (gameState.snake.length > 1) {
         gameState.snake.pop();
         gameState.score = Math.max(0, gameState.score - 5);
+        // Make the snake slower
+        gameState.gameSpeed = Math.min(gameState.gameSpeed + 30, 400); // Increase speed value (slower), max 400ms
         updateScore();
-        
-        showGameNotification('💥 ZKRÁCEN!', 'Nestihl jsi to včas - ztratil jsi kostičku a 5 bodů!', '#e74c3c');
-        
+        showGameNotification('💥 ZKRÁCEN!', 'Nestihl jsi to včas - ztratil jsi kostičku, 5 bodů a zpomalil!', '#e74c3c');
         animateShrink();
         animateScoreLoss();
         showFloatingText('-5', gameState.food.x, gameState.food.y, '#e74c3c');
-        
-        console.log(`Had se zkrátil! Délka: ${gameState.snake.length}, Skóre: ${gameState.score}`);
+        console.log(`Had se zkrátil! Délka: ${gameState.snake.length}, Skóre: ${gameState.score}, Speed: ${gameState.gameSpeed}`);
     } else {
         endGame();
         showGameNotification('💀 GAME OVER!', 'Byl jsi příliš pomalý!', '#c0392b');
@@ -312,6 +319,128 @@ function penalizeMissedFood() {
 
 function animateMissedFood() {
     console.log("Jídlo zmizelo! Nové jídlo se objevilo.");
+}
+
+// === Správa kamenů (rocks) ===
+function manageRocks(currentTime) {
+    // Only if game is running and not paused
+    if (!gameState.gameRunning || gameState.gamePaused) return;
+
+    // Use elapsed time since game start for rocks
+    const elapsed = gameState.rockStartTime ? currentTime - gameState.rockStartTime : 0;
+
+    // Stage progression: 1 rock at 1:00, 3 rocks at 1:30, 5 rocks at 2:00, wall at 2:30
+    if (elapsed < 60000) {
+        // Before 1 minute, no rocks
+        gameState.rockStage = 0;
+        gameState.rockCount = 0;
+        gameState.rocks = [];
+        return;
+    }
+    if (gameState.rockStage === 0 && elapsed >= 60000) {
+        gameState.rockStage = 1;
+        gameState.rockCount = 1;
+        gameState.rocks = generateRocks(gameState.rockCount);
+        gameState.lastRockMoveTime = currentTime;
+    } else if (gameState.rockStage === 1 && elapsed >= 90000) {
+        gameState.rockStage = 2;
+        gameState.rockCount = 3;
+        gameState.rocks = generateRocks(gameState.rockCount);
+        gameState.lastRockMoveTime = currentTime;
+    } else if (gameState.rockStage === 2 && elapsed >= 120000) {
+        gameState.rockStage = 3;
+        gameState.rockCount = 5;
+        gameState.rocks = generateRocks(gameState.rockCount);
+        gameState.lastRockMoveTime = currentTime;
+    } else if (gameState.rockStage === 3 && elapsed >= 150000) {
+        gameState.rockStage = 4;
+        gameState.rockCount = 6; // 3 rocks as wall + 3 singles
+        gameState.rocks = generateRocksWithWall();
+        gameState.lastRockMoveTime = currentTime;
+    }
+
+    // Move rocks every 15 seconds
+    if (gameState.rockStage > 0 && currentTime - gameState.lastRockMoveTime >= 15000) {
+        if (gameState.rockStage === 4) {
+            gameState.rocks = generateRocksWithWall();
+        } else {
+            gameState.rocks = generateRocks(gameState.rockCount);
+        }
+        gameState.lastRockMoveTime = currentTime;
+    }
+}
+
+// Helper: Generate rocks, ensuring snake is not fully blocked
+function generateRocks(count) {
+    // Try to place rocks randomly, but never block all escape paths
+    let rocks = [];
+    let attempts = 0;
+    while (rocks.length < count && attempts < 100) {
+        attempts++;
+        const rx = Math.floor(Math.random() * GAME_CONFIG.CANVAS.GRID_COUNT);
+        const ry = Math.floor(Math.random() * GAME_CONFIG.CANVAS.GRID_COUNT);
+        // Don't place on snake, food, or another rock
+        const onSnake = gameState.snake.some(seg => seg.x === rx && seg.y === ry);
+        const onFood = (gameState.food && gameState.food.x === rx && gameState.food.y === ry);
+        const onOtherRock = rocks.some(r => r.x === rx && r.y === ry);
+        if (!onSnake && !onFood && !onOtherRock) {
+            rocks.push({x: rx, y: ry});
+        }
+    }
+    // TODO: Add pathfinding check to ensure snake is not fully blocked
+    return rocks;
+}
+
+// New: Generate rocks with a wall (3 rocks in a row) and singles
+function generateRocksWithWall() {
+    const rocks = [];
+    const grid = GAME_CONFIG.CANVAS.GRID_COUNT;
+    let wallPlaced = false;
+    let attempts = 0;
+    // Try to place a wall (horizontal or vertical)
+    while (!wallPlaced && attempts < 100) {
+        attempts++;
+        const horizontal = Math.random() < 0.5;
+        if (horizontal) {
+            const y = Math.floor(Math.random() * grid);
+            const x = Math.floor(Math.random() * (grid - 2));
+            // Check snake is not blocked
+            const blocksSnake = gameState.snake.some(seg => seg.y === y && seg.x >= x && seg.x <= x + 2);
+            if (!blocksSnake) {
+                rocks.push({x: x, y: y});
+                rocks.push({x: x + 1, y: y});
+                rocks.push({x: x + 2, y: y});
+                wallPlaced = true;
+            }
+        } else {
+            const x = Math.floor(Math.random() * grid);
+            const y = Math.floor(Math.random() * (grid - 2));
+            const blocksSnake = gameState.snake.some(seg => seg.x === x && seg.y >= y && seg.y <= y + 2);
+            if (!blocksSnake) {
+                rocks.push({x: x, y: y});
+                rocks.push({x: x, y: y + 1});
+                rocks.push({x: x, y: y + 2});
+                wallPlaced = true;
+            }
+        }
+    }
+    // Place remaining rocks as singles
+    let singles = 3;
+    let singleAttempts = 0;
+    while (rocks.length < 6 && singleAttempts < 100) {
+        singleAttempts++;
+        const rx = Math.floor(Math.random() * grid);
+        const ry = Math.floor(Math.random() * grid);
+        // Don't place on snake, food, or another rock
+        const onSnake = gameState.snake.some(seg => seg.x === rx && seg.y === ry);
+        const onFood = (gameState.food && gameState.food.x === rx && gameState.food.y === ry);
+        const onOtherRock = rocks.some(r => r.x === rx && r.y === ry);
+        if (!onSnake && !onFood && !onOtherRock) {
+            rocks.push({x: rx, y: ry});
+        }
+    }
+    // TODO: Add pathfinding check to ensure snake is not fully blocked
+    return rocks;
 }
 
 // Make functions globally available

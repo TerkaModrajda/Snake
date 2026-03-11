@@ -91,7 +91,12 @@ const CONFIG = {
                 color: '#95a5a6'
             }
         };
-        return messages[key] || { icon: '❓', title: 'Neznámá zpráva', text: '', color: '#95a5a6' };
+        
+        if (!messages[key]) {
+            console.warn(`[CONFIG] Neznámý klíč zprávy: "${key}". Dostupné klíče:`, Object.keys(messages));
+        }
+        
+        return messages[key] || { icon: '❓', title: 'Neznámá zpráva', text: `Chybí definice pro klíč: ${key}`, color: '#95a5a6' };
     }
 };
 
@@ -353,6 +358,7 @@ function update() {
         restoreCorrectFoodCount();
         
         showGameNotification('🌟 SUPER JÍDLO!', '+50 bodů za super jídlo!', '#f1c40f');
+        showFloatingText('+50', head.x, head.y, '#f1c40f');
         console.log('[SCORE] Super jídlo: +50');
         animateScore();
         
@@ -382,17 +388,12 @@ function update() {
             if (head.x === frenzyFood.x && head.y === frenzyFood.y) {
                 // Odstraň snědené frenzy jídlo
                 gameState.frenzyFoods.splice(i, 1);
-                
                 // Přidej body za frenzy jídlo (stejně jako normální)
                 gameState.score += GAME_CONFIG.SCORING.NORMAL_FOOD;
                 updateScore();
-                
                 // Zobraz floating text
                 console.log('[SCORE] Normální jídlo: +' + GAME_CONFIG.SCORING.NORMAL_FOOD);
-                
-                // Zvětši hada
-                gameState.snake.push({...gameState.snake[gameState.snake.length - 1]});
-                
+                // NEZVĚTŠUJ hada při snědení frenzy jídla
                 console.log(`Frenzy jídlo snědeno! Zbývá ${gameState.frenzyFoods.length} frenzy jídel`);
                 return;
             }
@@ -439,6 +440,17 @@ function update() {
         }
     } else if (gameState.foodEaten >= 15) {
         console.log(`[DEBUG] Multi jídla nejsou k dispozici: multiFood=${gameState.multiFood}, foods.length=${gameState.foods.length}`);
+    }
+    
+    // Kontrola kolize s kamenem (rock)
+    if (gameState.rocks && gameState.rocks.length > 0) {
+        const head = gameState.snake[0];
+        for (let rock of gameState.rocks) {
+            if (head.x === rock.x && head.y === rock.y) {
+                endGame('Narazil jsi do kamene!');
+                return;
+            }
+        }
     }
     
     // Pokud nic nebylo snědeno, zkrať hada
@@ -795,7 +807,54 @@ function endGame() {
         gameState.gamePaused = false;
         console.log("⚠️ Fallback ukončení hry");
     }
+    // Always unlock skins based on high score after game ends
+    if (typeof unlockSkins === 'function') {
+        unlockSkins(gameState.highScore);
+    }
 }
+
+// === AdSense Timed Ad ===
+function showTimedAd() {
+    if (document.getElementById('adsense-timed')) return;
+    const adDiv = document.createElement('div');
+    adDiv.id = 'adsense-timed';
+    adDiv.style.position = 'fixed';
+    adDiv.style.top = '50%';
+    adDiv.style.left = '50%';
+    adDiv.style.transform = 'translate(-50%, -50%)';
+    adDiv.style.zIndex = '99999';
+    adDiv.style.background = '#fff';
+    adDiv.style.boxShadow = '0 0 30px #000';
+    adDiv.style.padding = '16px 8px';
+    adDiv.style.borderRadius = '12px';
+    adDiv.innerHTML = `
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9868306421254175" crossorigin="anonymous"></script>
+        <ins class="adsbygoogle"
+            style="display:block;min-width:250px;min-height:100px;"
+            data-ad-client="ca-pub-9868306421254175"
+            data-ad-slot="1234567890"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    `;
+    document.body.appendChild(adDiv);
+    setTimeout(() => {
+        adDiv.remove();
+    }, 10000);
+}
+
+// Hook into game end logic
+const _endGame = window.endGame;
+window.endGame = function() {
+    _endGame && _endGame();
+    // Check games played
+    let gamesPlayed = parseInt(localStorage.getItem('adsenseGamesPlayed') || '0');
+    gamesPlayed++;
+    localStorage.setItem('adsenseGamesPlayed', gamesPlayed);
+    if (gamesPlayed % 3 === 0) {
+        showTimedAd();
+    }
+};
 
 // Tyto funkce jsou nyní v animations.js
 
@@ -809,3 +868,83 @@ window.gameLoop = gameLoop;
 window.endGame = endGame;
 window.update = update;
 window.initGame = initGame;
+
+function startGame() {
+    // Nastavení počátečního stavu
+    gameState.snake = [{ x: 10, y: 10 }];
+    gameState.food = generateFood();
+    gameState.foods = [];
+    gameState.multiFood = false;
+    gameState.direction = { x: 1, y: 0 }; // Start moving right
+    gameState.score = 0;
+    gameState.gameRunning = true;
+    gameState.gamePaused = false;
+    gameState.gameStarted = true;
+    gameState.foodEaten = 0;
+    gameState.timedFood = false;
+    gameState.foodTimer = 0;
+    gameState.gameSpeed = gameState.baseSpeed;
+    gameState.lastUpdateTime = 0;
+    gameState.lastMoveTime = 0;
+    gameState.movingFood = false;
+    gameState.food.direction = { x: 0, y: 0 };
+    gameState.lastFoodMoveTime = 0;
+    
+    // KOMPLETNÍ RESET super jídla
+    gameState.superFood = null;
+    gameState.superFoodActive = false;
+    gameState.superFoodTimer = 0;
+    gameState.lastSuperFoodSpawn = 0;
+    
+    // KOMPLETNÍ RESET bonusového systému
+    gameState.bonuses = [];
+    gameState.bonusEffectActive = false;
+    gameState.bonusEffectTimer = 0;
+    gameState.bonusCooldownTimer = 0;
+    gameState.speedBeforeBonus = 0;
+    gameState.lastBonusSpawn = 0;
+    gameState.maxBonusesOnMap = 1;
+    
+    // KOMPLETNÍ RESET magnet efektů
+    gameState.magnetEffectActive = false;
+    gameState.magnetEffectStartTime = 0;
+    gameState.magnetAnimations = [];
+    
+    // KOMPLETNÍ RESET Food Frenzy systému
+    gameState.frenzyActive = false;
+    gameState.frenzyTimer = 0;
+    gameState.frenzyFoods = [];
+    gameState.normalFoodCountBeforeFrenzy = 0;
+    
+    // RESET starého bonus zpomalení (pro kompatibilitu)
+    gameState.slowBonus = null;
+    
+    console.log("[DEBUG] initGame: Kompletní reset všech bonusových efektů dokončen");
+    
+    // VYČIŠTĚNÍ VIZUÁLNÍCH INDIKÁTORŮ
+    clearAllVisualEffects();
+    
+    // Odeber třídu pro rozjasnění bočních kontejnerů
+    document.body.classList.add('game-active');
+    
+    updateScore();
+    updateHighScore();
+    hideGameOver();
+    showStartPopup();
+    draw();
+    
+    // Hide start popup if visible
+    if (typeof hideStartPopup === 'function') hideStartPopup();
+    
+    // Start the game loop
+    if (typeof smoothGameLoop === 'function') {
+        smoothGameLoop();
+    }
+    
+    // Nastavení počátečního času pro kameny
+    gameState.rockStartTime = Date.now(); // Set start time for rocks
+    gameState.rockStage = 0;
+    gameState.rockCount = 0;
+    gameState.rocks = [];
+    gameState.lastRockMoveTime = Date.now(); // Ensure lastRockMoveTime is set to now
+}

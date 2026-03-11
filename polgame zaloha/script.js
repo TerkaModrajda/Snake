@@ -26,6 +26,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (typeof startGame === 'function') {
                 startGame();
             }
+            // Hide the start popup
+            const startPopup = document.getElementById('start-popup');
+            if (startPopup) {
+                startPopup.style.display = 'none';
+            }
         });
     }
     

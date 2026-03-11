@@ -11,6 +11,20 @@
     image-rendering: crisp-edges;
 }
 
+html {
+    overflow-x: visible;
+    overflow-y: auto;
+    max-width: none;
+    width: auto;
+}
+
+body {
+    overflow-x: visible;
+    overflow-y: auto;
+    max-width: none;
+    width: auto;
+}
+
 body {
     font-family: 'Press Start 2P', 'Courier New', monospace;
     background: linear-gradient(45deg, #0a0a0a 0%, #0f1419 25%, #0a1a1a 50%, #0f1419 75%, #0a0a0a 100%);
@@ -20,8 +34,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    padding: 10px;
-    padding-top: 50px;
+    padding: 50px;
+    padding-top: 60px;
     font-size: 8px;
     line-height: 1.6;
     position: relative;
@@ -35,12 +49,17 @@ body {
 
 .main-layout {
     display: flex;
-    gap: 20px;
+    gap: 30px;
     max-width: 1400px;
-    width: 100%;
+    width: auto;
     align-items: flex-start;
     justify-content: center;
-    margin-top: -30px !important;
+    margin: -60px auto 0 auto;
+    min-height: calc(100vh - 100px);
+    overflow-y: visible;
+    overflow-x: visible;
+    box-sizing: border-box;
+    padding: 20px;
 }
 
 .game-container {
@@ -51,13 +70,15 @@ body {
         0 0 20px #00ff00,
         inset 0 0 20px rgba(0, 255, 0, 0.1),
         0 4px 8px rgba(0, 0, 0, 0.6);
-    padding: 20px;
+    padding: 15px;
     text-align: center;
-    flex: 2;
-    min-width: 600px;
-    max-width: 650px;
+    flex: 0 0 600px;
+    min-width: 500px;
+    max-width: 600px;
+    width: 600px;
     position: relative;
     overflow: hidden;
+    box-sizing: border-box;
 }
 
 /* Snake Game nadpis s žlutou barvou */
@@ -70,23 +91,35 @@ body {
     margin-bottom: 20px;
 }
 
-.mechanics-container,
-.history-container {
-    background: linear-gradient(145deg, #0a0a1a 0%, #0f1420 50%, #0a0a1a 100%);
-    border: 3px solid #00ff41;
-    border-image: linear-gradient(45deg, #00ff41, #00ccaa, #00ff41) 1;
-    box-shadow: 
-        0 0 15px #00ff41,
-        inset 0 0 15px rgba(0, 255, 65, 0.1),
-        0 4px 8px rgba(0, 0, 0, 0.6);
+/* Levý panel - mechaniky */
+.mechanics-container {
+    background: linear-gradient(145deg, #0a0a1a 0%, #0f1420 50%, #0a0a1a 100%) !important;
     padding: 15px;
-    flex: 1;
-    min-width: 300px;
-    max-width: 350px;
+    flex: 0 0 300px;
+    min-width: 250px;
+    max-width: 300px;
     position: relative;
-    overflow: hidden;
+    width: 300px !important; 
+    height: auto !important;
+    overflow: visible !important;
+    z-index: 10;
+    box-sizing: border-box;
 }
 
+/* Pravý panel - historie */
+.history-container {
+    background: linear-gradient(145deg, #0a0a1a 0%, #0f1420 50%, #0a0a1a 100%) !important;
+    padding: 15px;
+    flex: 0 0 300px;
+    min-width: 250px;
+    max-width: 300px;
+    position: relative;
+    width: auto !important; 
+    height: auto !important;
+    overflow: visible !important;
+    z-index: 10;
+    box-sizing: border-box;
+}
 
 .mechanics-container header,
 .history-container header {
@@ -103,7 +136,7 @@ body {
     text-shadow: 0 2px 4px #000;
     text-transform: uppercase;
     letter-spacing: 2px;
-    text-align: center;
+    text-align: left;
 }
 
 .history-content {
@@ -237,9 +270,13 @@ body {
 }
 
 .achievements-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-    gap: 8px;
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    grid-template-rows: repeat(2, minmax(60px, 1fr)) !important;
+    gap: 12px !important;
+    justify-items: stretch;
+    align-items: stretch;
+    width: 100%;
 }
 
 .achievement {
@@ -257,7 +294,9 @@ body {
     text-align: center;
     aspect-ratio: 1;
     min-height: 60px;
+    width: 100%;
     position: relative;
+    box-sizing: border-box;
 }
 
 .achievement.locked {
@@ -299,6 +338,12 @@ body {
     -moz-osx-font-smoothing: grayscale !important;
     text-rendering: optimizeSpeed !important;
     text-shadow: 1px 1px 0px #000000;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    height: 24px !important;
+    margin-bottom: 4px !important;
 }
 
 .achievement.unlocked .achievement-icon {
@@ -313,8 +358,30 @@ body {
     -moz-osx-font-smoothing: grayscale !important;
 }
 
+/* Styly pro obrázky v achievement ikonách */
+.achievement-icon img {
+    width: 20px !important;
+    height: 20px !important;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+    image-rendering: pixelated !important;
+    image-rendering: -moz-crisp-edges !important;
+    image-rendering: crisp-edges !important;
+}
+
+/* Vycentrování achievement ikon (textových i obrázkových) */
+.achievement-icon {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    height: 24px !important;
+    margin-bottom: 4px !important;
+}
+
 .achievement-text {
-    font-size: 6px;
+    font-size: 8px;
     color: #dddddd;
     text-shadow: 1px 1px 0px #000000, 0 0 2px #000000;
     line-height: 1.2;
@@ -331,11 +398,15 @@ body {
 .achievement:hover {
     transform: translateY(-2px);
     z-index: 10;
+    border-color: #00ff41;
+    box-shadow: 0 0 15px #00ff41, 0 0 25px rgba(0, 255, 65, 0.3);
+    transition: all 0.3s ease;
 }
 
 .achievement.unlocked:hover {
     box-shadow: 0 0 30px #00ff41, 0 0 60px rgba(0, 255, 65, 0.7), 0 0 100px rgba(0, 255, 65, 0.3), inset 0 0 20px rgba(0, 255, 65, 0.3);
-    transform: translateY(-4px) scale(1.1);
+    transform: translateY(-4px) scale(1.05);
+    transition: all 0.3s ease;
 }
 
 /* Tooltip pro achievement při hover */
@@ -347,7 +418,7 @@ body {
     background: linear-gradient(145deg, #000000 0%, #1a1a1a 100%);
     border: 1px solid #00ff41;
     padding: 4px 6px;
-    font-size: 5px;
+    font-size: 8px;
     white-space: nowrap;
     z-index: 20;
     box-shadow: 0 0 10px #00ff41;
@@ -358,7 +429,6 @@ body {
     border-color: #666666;
     box-shadow: 0 0 5px #666666;
 }
-
 
 .unlock-condition {
     display: block;
@@ -412,14 +482,14 @@ body {
         0 0 20px #00ff00,
         inset 0 0 20px rgba(0, 255, 0, 0.1),
         0 4px 8px rgba(0, 0, 0, 0.6);
-    max-width: 90vw;
-    max-height: 70vh;
+    max-width: 600px;
+    max-height: 600px;
     image-rendering: pixelated;
     image-rendering: -moz-crisp-edges;
     image-rendering: crisp-edges;
 }
 
-.game-over {
+#game-over {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -434,6 +504,7 @@ body {
         inset 0 0 20px rgba(0, 255, 65, 0.1),
         0 10px 20px rgba(0, 0, 0, 0.8);
     z-index: 10000;
+    opacity: 1 !important;
     font-family: 'Press Start 2P', monospace;
     max-width: 500px;
     width: 90%;
@@ -445,6 +516,12 @@ body {
     pointer-events: auto;
 }
 
+/* End game notifikace zůstává jasná */
+body.game-over #game-over {
+    opacity: 1 !important;
+    z-index: 10000 !important;
+}
+
 .game-over h2 {
     font-size: 16px;
     margin-bottom: 15px;
@@ -453,6 +530,17 @@ body {
     text-transform: uppercase;
     letter-spacing: 2px;
     text-shadow: 0 2px 4px #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+.game-over h2 img.snake-death {
+    width: 50px; /* Change this value to your desired width */
+    height: 32px; /* Or set to 'auto' to keep aspect ratio */
+    image-rendering: pixelated;
+    margin: 0 16px;
+    vertical-align: middle;
 }
 
 .game-over p {
@@ -878,7 +966,7 @@ body *:not(canvas):not(svg) {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
+    z-index: 10000;
     padding: 20px;
     background-image: 
         radial-gradient(circle at 25% 25%, #001122 0%, transparent 50%),
@@ -909,6 +997,7 @@ body *:not(canvas):not(svg) {
     position: relative;
     font-family: 'Press Start 2P', monospace;
     font-size: 10px;
+    z-index: 10001;
 }
 
 
@@ -956,21 +1045,20 @@ body *:not(canvas):not(svg) {
 /* Zatmavení bočních panelů během hry */
 body.game-active .mechanics-container,
 body.game-active .history-container {
-    opacity: 0.3;
+    opacity: 0.3 !important;
     transition: opacity 0.3s ease;
+    flex-shrink: 0 !important;
+    min-width: 390px !important;
+    max-width: 400px !important;
+    width: auto !important;
 }
-
 body.game-active .mechanics-container:hover,
 body.game-active .history-container:hover {
-    opacity: 0.6;
+    opacity: 0.6 !important;
 }
 
-/* Ztmavení obsahu prostředního containeru při game-over, ale zachování pozadí a layoutu */
-body.game-over .game-container .score-container,
-body.game-over .game-container .game-area,
-body.game-over .game-container .controls,
-body.game-over .game-container .start-hint {
-    opacity: 0.5;
+body.game-over .game-container {
+    opacity: 0.5 !important;
     transition: opacity 0.3s ease;
 }
 
@@ -979,40 +1067,10 @@ body.game-over .game-container:hover .score-container,
 body.game-over .game-container:hover .game-area,
 body.game-over .game-container:hover .controls,
 body.game-over .game-container:hover .start-hint {
-    opacity: 0.1;
+    opacity: 0.7;
 }
 
 
-
-/* Když je současně game-active i game-over - udržuj layout, ale udělej viditelnější */
-body.game-active.game-over .mechanics-container,
-body.game-active.game-over .history-container {
-    opacity: 0,7;
-    transition: opacity 0.3s ease;
-}
-
-body.game-active.game-over .mechanics-container:hover,
-body.game-active.game-over .history-container:hover {
-    opacity: 1;
-}
-
-/* Zajištění, že game-over má vyšší prioritu než game-active pro obsah game-container */
-body.game-active.game-over .game-container h1,
-body.game-active.game-over .game-container .score-container,
-body.game-active.game-over .game-container .game-area,
-body.game-active.game-over .game-container .controls,
-body.game-active.game-over .game-container .start-hint {
-    opacity: 0.1;
-    transition: opacity 0.3s ease;
-}
-
-body.game-active.game-over .game-container:hover h1,
-body.game-active.game-over .game-container:hover .score-container,
-body.game-active.game-over .game-container:hover .game-area,
-body.game-active.game-over .game-container:hover .controls,
-body.game-active.game-over .game-container:hover .start-hint {
-    opacity: 0.9;
-}
 
 /* Skryj pouze specifické elementy */
 body.game-over #speed-info,
@@ -1022,8 +1080,7 @@ body.game-over #game-notification {
 
 /* CRITICAL: Zablokuj responzivní chování během hry a game-over (FORCE DESKTOP LAYOUT) */
 body.game-active .main-layout,
-body.game-over .main-layout,
-body.game-active.game-over .main-layout {
+body.game-over .main-layout {
     display: flex !important;
     flex-direction: row !important;
     align-items: flex-start !important;
@@ -1033,16 +1090,15 @@ body.game-active.game-over .main-layout {
     width: 100% !important;
 }
 body.game-active .game-container,
-body.game-over .game-container,
-body.game-active.game-over .game-container {
+body.game-over .game-container {
     min-width: 600px !important;
     max-width: 650px !important;
     flex: 2 !important;
     width: auto !important;
 }
 body.game-active .mechanics-container,
-body.game-active.game-over .mechanics-container,
-body.game-active.game-over .history-container {
+body.game-over .mechanics-container,
+body.game-over .history-container {
     min-width: 390px !important;
     max-width: 400px !important;
     flex: 1 !important;
@@ -1191,29 +1247,7 @@ body.game-active.game-over .history-container {
     position: relative;
     overflow: visible;
 }
-.classic-skin::before {
-    /* Hair (top brown) */
-    content: '';
-    position: absolute;
-    left: 12px;
-    top: -2px;
-    width: 6px;
-    height: 4px;
-    background: #8d5524;
-    border-radius: 2px 2px 0 0;
-}
-.classic-skin::after {
-    /* Eyes (two black dots) */
-    content: '';
-    position: absolute;
-    left: 13px;
-    top: 4px;
-    width: 2px;
-    height: 2px;
-    background: #222;
-    border-radius: 50%;
-    box-shadow: 4px 0 #222;
-}
+
 .classic-skin .bottom-decoration {
     position: absolute;
     left: 10px;
@@ -1223,18 +1257,7 @@ body.game-active.game-over .history-container {
     display: flex;
     justify-content: space-between;
 }
-.classic-skin .bottom-decoration .red {
-    width: 6px;
-    height: 100%;
-    background: #e74c3c;
-    border-radius: 0 0 2px 2px;
-}
-.classic-skin .bottom-decoration .blue {
-    width: 6px;
-    height: 100%;
-    background: #3498db;
-    border-radius: 0 0 2px 2px;
-}
+
 .rainbow-skin {
     background: linear-gradient(90deg, #e74c3c, #f39c12, #f1c40f, #2ecc71, #3498db, #9b59b6);
     background-size: 200% 100%;
@@ -1346,177 +1369,365 @@ body.game-active.game-over .history-container {
     }
 }
 
-@keyframes rainbow {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 200% 50%; }
+/* RESPONZIVNÍ DESIGN - TABLET */
+@media (max-width: 1024px) {
+    body {
+        padding: 15px;
+        padding-top: 25px;
+    }
+    
+    .main-layout {
+        gap: 10px;
+        max-width: calc(100vw - 30px);
+    }
+    
+    .game-container {
+        min-width: 280px;
+        padding: 12px;
+    }
+    
+    .game-container h1 {
+        font-size: 20px;
+    }
+    
+    .mechanics-container,
+    .history-container {
+        min-width: 220px;
+        padding: 10px;
+    }
 }
 
-/* --- FIX: Only left-align mechanics text, not items --- */
-.mechanic-text {
-    text-align: left !important;
-}
-body.game-over .mechanic-text,
-body.game-active .mechanic-text,
-body.game-active.game-over .mechanic-text {
-    text-align: left !important;
-}
-/* Remove forced alignment from containers */
-.mechanics-container,
-.mechanics-content,
-.mechanics-list,
-.mechanic-item {
-    /* Remove previous left alignment overrides */
-    /* ...existing code... */
+/* RESPONZIVNÍ DESIGN - MOBIL */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+        padding-top: 20px;
+        font-size: 7px;
+    }
+    
+    .main-layout {
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 8px !important;
+        max-width: calc(100vw - 20px) !important;
+        width: calc(100vw - 20px) !important;
+    }
+    
+    .game-container {
+        min-width: 0 !important;
+        max-width: calc(100vw - 20px) !important;
+        width: calc(100vw - 20px) !important;
+        padding: 8px !important;
+        order: 1;
+    }
+    
+    .game-container h1 {
+        font-size: 16px;
+        margin-bottom: 15px;
+        letter-spacing: 2px;
+    }
+    
+    .mechanics-container,
+    .history-container {
+        min-width: 0 !important;
+        max-width: calc(100vw - 20px) !important;
+        width: calc(100vw - 20px) !important;
+        padding: 8px !important;
+    }
+    
+    .mechanics-container {
+        order: 2;
+    }
+    
+    .history-container {
+        order: 3;
+    }
+    
+    .game-area {
+        margin: 8px 0;
+        max-width: 100%;
+        overflow: visible;
+    }
+    
+    #gameCanvas {
+        max-width: calc(100vw - 24px) !important;
+        max-height: 60vw !important;
+        width: calc(100vw - 24px) !important;
+        height: auto !important;
+    }
+    
+    .achievements-list {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+    }
+    
+    .overlay-content {
+        max-width: calc(100vw - 20px);
+        padding: 15px;
+        margin: 10px;
+        font-size: 9px;
+    }
 }
 
-/* --- Retro Arrow Key Visual for Start Popup --- */
-.start-arrows {
-    display: flex;
-    justify-content: center;
-    gap: 18px;
-    margin-bottom: 18px;
-    margin-top: 8px;
+/* RESPONZIVNÍ DESIGN - MALÝ MOBIL */
+@media (max-width: 480px) {
+    body {
+        font-size: 6px;
+        padding: 8px;
+        padding-top: 15px;
+    }
+    
+    .main-layout {
+        gap: 5px !important;
+        max-width: calc(100vw - 16px) !important;
+    }
+    
+    .game-container,
+    .mechanics-container,
+    .history-container {
+        max-width: calc(100vw - 16px) !important;
+        width: calc(100vw - 16px) !important;
+        padding: 6px !important;
+    }
+    
+    .game-container h1 {
+        font-size: 14px;
+        letter-spacing: 1px;
+        margin-bottom: 10px;
+    }
+    
+    #gameCanvas {
+        max-width: calc(100vw - 16px) !important;
+        width: calc(100vw - 16px) !important;
+    }
+    
+    .overlay-content {
+        max-width: calc(100vw - 10px);
+        padding: 10px;
+        margin: 5px;
+        font-size: 8px;
+    }
+    
+    .achievements-list {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 6px !important;
+    }
+    
+    .achievement {
+        min-height: 45px;
+        font-size: 7px;
+    }
 }
-.start-arrow {
-    font-size: 32px;
-    color: #00ff41;
-    background: #001a33;
-    border: 2px solid #00ff41;
-    border-radius: 8px;
-    box-shadow: 0 0 8px #00ff41, inset 0 0 4px rgba(0,255,65,0.2);
-    padding: 8px 14px;
-    font-family: 'Press Start 2P', monospace;
-    text-shadow: 1px 1px 0px #000, 0 0 6px #00ff41;
-    image-rendering: pixelated;
-}
-/* --- END Retro Arrow Key Visual --- */
 
-/* --- Retro Keypad Arrow Keys for Start Popup --- */
+/* RESPONZIVNÍ CHOVÁNÍ I BĚHEM HRY */
+@media (max-width: 768px) {
+    body.game-active .main-layout,
+    body.game-over .main-layout {
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 8px !important;
+        max-width: calc(100vw - 20px) !important;
+        width: calc(100vw - 20px) !important;
+    }
+    
+    body.game-active .game-container,
+    body.game-over .game-container {
+        min-width: 0 !important;
+        max-width: calc(100vw - 20px) !important;
+        width: calc(100vw - 20px) !important;
+        flex: none !important;
+    }
+    
+    body.game-active .mechanics-container,
+    body.game-over .mechanics-container,
+    body.game-over .history-container {
+        min-width: 0 !important;
+        max-width: calc(100vw - 20px) !important;
+        width: calc(100vw - 20px) !important;
+        flex: none !important;
+        opacity: 1 !important;
+    }
+}
+
+/* Zajištění viditelných okrajů panelů pomocí border + outline */
+.mechanics-container {
+    margin: 10px !important;
+    border: 5px solid #00ff41 !important;
+    outline: 2px solid #00ccaa !important;
+    outline-offset: 2px !important;
+    border-radius: 10px 5px 5px 10px;
+    box-shadow: 
+        0 0 15px #00ff41,
+        inset 0 0 15px rgba(0, 255, 65, 0.1),
+        0 4px 8px rgba(0, 0, 0, 0.6) !important;
+}
+
+.history-container {
+    margin: 10px !important;  
+    border: 5px solid #00ff41 !important;
+    outline: 2px solid #00ccaa !important;
+    outline-offset: 2px !important;
+    border-radius: 5px 10px 10px 5px;
+    box-shadow: 
+        0 0 15px #00ff41,
+        inset 0 0 15px rgba(0, 255, 65, 0.1),
+        0 4px 8px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Specifické nastavení pro rychlý blesk achievement */
+.achievement[data-achievement="speed-demon"] {
+    min-height: 60px !important;
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 1 !important;
+}
+
+.achievement[data-achievement="speed-demon"] .achievement-icon {
+    height: 24px !important;
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.achievement[data-achievement="speed-demon"] .achievement-icon img {
+    width: 20px !important;
+    height: 20px !important;
+    object-fit: contain !important;
+    display: block !important;
+    margin: 0 auto !important;
+}
+
+/* Hover efekt pro zvětšení obrázků v achievementech */
+.achievement:hover .achievement-icon img {
+    transform: scale(1.3) !important;
+    transition: transform 0.3s ease !important;
+    filter: brightness(1.2) contrast(1.1) !important;
+}
+
+.achievement.unlocked:hover .achievement-icon img {
+    transform: scale(1.4) !important;
+    filter: brightness(1.3) contrast(1.2) drop-shadow(0 0 8px currentColor) !important;
+}
+
+/* Přechod pro plynulý efekt */
+.achievement-icon img {
+    transition: all 0.3s ease !important;
+}
+
+/* Styly pro šipky v start popupu */
 .arrow-keypad {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 18px;
-    margin-top: 8px;
-    gap: 6px;
+    gap: 8px;
 }
+
 .arrow-key-row {
     display: flex;
-    gap: 6px;
+    gap: 8px;
     justify-content: center;
-}
-.arrow-key {
-    width: 44px;
-    height: 44px;
-    display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: 28px;
-    color: #00ff41;
-    background: linear-gradient(145deg, #001a33 0%, #002244 100%);
-    border: 3px solid #00ff41;
-    border-radius: 8px;
-    box-shadow: 0 0 10px #00ff41, inset 0 0 6px rgba(0,255,65,0.2);
-    font-family: 'Press Start 2P', monospace;
-    text-shadow: 1px 1px 0px #000;
-    image-rendering: pixelated;
-    transition: background 0.2s, box-shadow 0.2s;
-    font-weight: bold;
-    -webkit-text-stroke:#00ff41;
-    letter-spacing: 0;
 }
-.arrow-key.arrow-left,
-.arrow-key.arrow-right {
-    font-weight: 900;
-    -webkit-text-stroke-width: 2.5px;
-}
-.arrow-key:active, .arrow-key:focus {
-    background: linear-gradient(145deg, #002244 0%, #001a33 100%);
-    box-shadow: 0 0 18px #00ff41, 0 0 8px #0099ff;
-    outline: none;
-}
-/* --- END Retro Keypad Arrow Keys --- */
 
-/* --- Volič (classic) skin preview --- */
-.skin-preview.classic-skin {
-    position: relative;
-    width: 60px;
-    height: 24px;
-    border-radius: 12px;
-    background: #fbe7c6;
-    border: 2px solid #222;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    margin: 0 auto;
-}
-.classic-hair-full {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 56px;
-    height: 8px;
-    background: #7c4a02;
-    border-radius: 15px 15px 5px 5px;
-    z-index: 2;
-}
-.classic-eyes {
-    position: absolute;
-    top: 10px; /* Move eyes down for more forehead */
-    left: 50%;
-    transform: translateX(-50%);
-    width: 18px;
-    height: 8px;
-    display: flex;
-    justify-content: space-between;
+.arrow-key {
+    display: inline-flex;
     align-items: center;
-    z-index: 3;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: #00ff41;
+    color: #000000;
+    border: 2px solid #00ff41;
+    border-radius: 8px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    box-shadow: 
+        0 0 10px #00ff41,
+        inset 0 0 5px rgba(0, 255, 65, 0.2);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-shadow: none;
 }
-.classic-eye {
-    width: 4px;
-    height: 4px;
-    background: #222;
-    border-radius: 50%;
+
+.arrow-key:hover {
+    background: #00dd33;
+    transform: translateY(-2px);
+    box-shadow: 
+        0 0 15px #00ff41,
+        inset 0 0 8px rgba(0, 255, 65, 0.3);
 }
-.classic-bottom-vertical {
-    position: absolute;
+
+/* AdSense reklamy - styly */
+
+/* Sidebar reklama v levém panelu */
+.ad-container-sidebar {
+    width: 100%;
+    margin: 20px 0 10px 0;
+    padding: 10px;
+    background: linear-gradient(145deg, #0a0a0a 0%, #0f0f1a 50%, #0a0a0a 100%);
+    border: 2px solid #00ff00;
+    border-radius: 8px;
+    box-shadow: 
+        0 0 10px rgba(0, 255, 0, 0.3),
+        inset 0 0 10px rgba(0, 255, 0, 0.1);
+    text-align: center;
+}
+
+/* Menší sidebar reklama pro pravý panel */
+.ad-container-sidebar-small {
+    width: 100%;
+    margin: 15px 0 8px 0;
+    padding: 6px;
+    background: linear-gradient(145deg, #0a0a0a 0%, #0f0f1a 50%, #0a0a0a 100%);
+    border: 1px solid #00ff00;
+    border-radius: 6px;
+    box-shadow: 
+        0 0 6px rgba(0, 255, 0, 0.2),
+        inset 0 0 6px rgba(0, 255, 0, 0.08);
+    text-align: center;
+    font-size: 10px;
+}
+
+/* Spodní sticky reklama */
+.ad-container-bottom {
+    position: fixed;
     bottom: 0;
     left: 0;
-    width: 60px;
-    height: 8px;
-    display: flex;
-    flex-direction: row;
-    z-index: 2;
-}
-
-/* --- End Volič skin preview --- */
-
-/* --- Skin selection grid layout as in the image --- */
-.skins-selection-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: auto 1fr;
-    gap: 32px 24px; /* vertical and horizontal gap */
-    justify-content: center;
-    align-items: start;
+    right: 0;
     width: 100%;
-    margin: 0 auto;
-}
-.skins-selection-grid .big-volic {
-    grid-column: 1 / span 3;
-    justify-self: center;
-    margin-bottom: 0;
-}
-.skins-selection-grid .skins-3x3 {
-    grid-column: 1 / span 3;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    gap: 24px;
-    justify-content: center;
-    align-items: center;
+    max-width: 100%;
+    padding: 8px;
+    background: rgba(15, 15, 35, 0.95);
+    border-top: 2px solid #00ff00;
+    box-shadow: 0 -2px 10px rgba(0, 255, 0, 0.3);
+    text-align: center;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
 }
 
+/* Responsivní úpravy pro reklamy */
+@media (max-width: 768px) {
+    .ad-container-sidebar {
+        margin: 15px 0 8px 0;
+        padding: 8px;
+    }
+    
+    .ad-container-sidebar-small {
+        margin: 10px 0 6px 0;
+        padding: 4px;
+    }
+    
+    .ad-container-bottom {
+        padding: 5px;
+    }
+}
+
+/* Úprava body padding kvůli spodní reklamě */
+body {
+    padding-bottom: 80px; /* Prostor pro sticky reklamu */
+}
 
 

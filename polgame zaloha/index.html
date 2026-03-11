@@ -1,21 +1,29 @@
-<!DOCTYPE lang="cs">
+<!DOCTYPE html>
+<html lang="cs">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Snake Hra</title>
     <link rel="stylesheet" href="style.css">
+    
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9868306421254175"
+         crossorigin="anonymous"></script>
 </head>
 <body>
     <div class="main-layout">
 <!-- Levý panel - Herní mechaniky -->
     <div class="mechanics-container">
             <header>
-                <h2>👾 Herní mechaniky</h2>
+                <h2>
+                    <img src="img/gameMechanics.png" alt="Joystick" style="height: 48px; vertical-align: middle; margin-right: 12px;">
+                    Herní mechaniky
+                </h2>
             </header>
             <div class="mechanics-content">
                 <div class="mechanics-list">
                     <div class="mechanic-item">
-                        <span class="mechanic-icon">🍎</span>
+                        <span class="mechanic-icon"><img src="img/food.png" alt="food" style="width: 22px; height: 22px; image-rendering: pixelated; vertical-align: middle;"></span>
                         <div class="mechanic-text">
                             <strong>Progresivní jídlo</strong>
                             <span>Více jídel s vyšší úrovní</span>
@@ -23,7 +31,7 @@
                     </div>
                     
                     <div class="mechanic-item">
-                        <span class="mechanic-icon">⭐</span>
+                        <span class="mechanic-icon"><img src="img/superFood.png" alt="food" style="width: 22px; height: 22px; image-rendering: pixelated; vertical-align: middle;"></span>
                         <div class="mechanic-text">
                             <strong>Super jídlo</strong>
                             <span>Bonusové jídlo (+50 bodů)</span>
@@ -39,7 +47,7 @@
                     </div>
                     
                     <div class="mechanic-item">
-                        <span class="mechanic-icon">⏱️</span>
+                        <span class="mechanic-icon"><img src="img/time.png" alt="Time" style="width: 22px; height: 22px; image-rendering: pixelated; vertical-align: middle;"></span>
                         <div class="mechanic-text">
                             <strong>Časované jídlo</strong>
                             <span>Mizí po 8 sekundách</span>
@@ -47,7 +55,7 @@
                     </div>
                     
                     <div class="mechanic-item">
-                        <span class="mechanic-icon">⚡</span>
+                        <span class="mechanic-icon"><img src="img/speed.png" alt="Speed" style="width: 22px; height: 22px; image-rendering: pixelated; vertical-align: middle;"></span>
                         <div class="mechanic-text">
                             <strong>Zrychlování</strong>
                             <span>Rychlost se zvyšuje</span>
@@ -55,7 +63,7 @@
                     </div>
                     
                     <div class="mechanic-item">
-                        <span class="mechanic-icon">🐌</span>
+                        <span class="mechanic-icon"><img src="img/slow.png" alt="Slow" style="width: 22px; height: 22px; image-rendering: pixelated; vertical-align: middle;"></span>
                         <div class="mechanic-text">
                             <strong>Zpomalení</strong>
                             <span>Bonus cooldown 20s</span>
@@ -63,7 +71,7 @@
                     </div>
                     
                     <div class="mechanic-item">
-                        <span class="mechanic-icon">🧲</span>
+                        <span class="mechanic-icon"><img src="img/magnet.png" alt="Magnet" style="width: 22px; height: 22px; image-rendering: pixelated; vertical-align: middle;"></span>
                         <div class="mechanic-text">
                             <strong>Magnet</strong>
                             <span>Přitahuje jídlo</span>
@@ -71,7 +79,7 @@
                     </div>
                     
                     <div class="mechanic-item">
-                        <span class="mechanic-icon">🎆</span>
+                        <span class="mechanic-icon"><img src="img/frenzy.png" alt="Frenzy" style="width: 22px; height: 22px; image-rendering: pixelated; vertical-align: middle;"></span>
                         <div class="mechanic-text">
                             <strong>Food Frenzy</strong>
                             <span>15 jídel na 10s</span>
@@ -79,7 +87,7 @@
                     </div>
                     
                     <div class="mechanic-item">
-                        <span class="mechanic-icon">💀</span>
+                        <span class="mechanic-icon"><img src="img/penalization.png" alt="Penalizace" style="width: 22px; height: 22px; image-rendering: pixelated; vertical-align: middle;"></span>
                         <div class="mechanic-text">
                             <strong>Penalizace</strong>
                             <span>-50 bodů, zkrácení</span>
@@ -87,12 +95,33 @@
                     </div>
                     
                     <div class="mechanic-item">
-                        <span class="mechanic-icon">🚀</span>
+                        <span class="mechanic-icon"><img src="img/speedReal.png" alt="Zrychlení" style="width: 22px; height: 22px; image-rendering: pixelated; vertical-align: middle;"></span>
                         <div class="mechanic-text">
                             <strong>Zrychlení</strong>
                             <span>Rychlejší pohyb 8s</span>
                         </div>
                     </div>
+
+                    <div class="mechanic-item">
+                        <span class="mechanic-icon"><img src="img/rock.png" alt="rock" style="width: 22px; height: 22px; image-rendering: pixelated; vertical-align: middle;"></span>
+                        <div class="mechanic-text">
+                            <strong>Kameny</strong>
+                            <span>Objevují se jako překážky</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sidebar banner advertisement -->
+                <div class="ad-container-sidebar">
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-9868306421254175"
+                         data-ad-slot="1234567890"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
+                    <script>
+                         (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
                 </div>
             </div>
         </div>
@@ -100,7 +129,11 @@
 <!-- Prostřední panel - Hra -->        
     <div class="game-container">
         <header>
-            <h1>🐍 SNAKE GAME 🐍</h1>
+            <h1>
+                <img src="img/snake.png" alt="Snake" style="height: 48px; vertical-align: middle; margin-right: 12px;">
+                SNAKE GAME
+                <img src="img/snake.png" alt="Snake" style="height: 48px; vertical-align: middle; margin-left: 12px;">
+            </h1>
             <div class="score-container">
                 <div class="score">
                     <span>Skóre: </span>
@@ -123,36 +156,31 @@
 
             <div id="start-popup" class="overlay">
                 <div class="overlay-content">
-                    <h2>SNAKE GAME</h2>
+                    <h2>
+                        <img src="img/snake.png" alt="Snake" style="height: 38px; vertical-align: middle; margin-right: 10px;">
+                        SNAKE GAME
+                        <img src="img/snake.png" alt="Snake" style="height: 38px; vertical-align: middle; margin-left: 10px;">
+                    </h2>
                     
                     <div class="popup-skins-section">
-                        <h3>🎨 Vyber si skin hada:</h3>
+                        <h3>
+                            <img src="img/skin.png" alt="Skin" style="height: 38px; vertical-align: middle; margin-left: 10px;">
+                            Vyber si skin hada:
+                        </h3>
                         <div class="popup-skins-grid" id="start-skins-grid">
                             <div class="skin-item active" data-skin="classic">
-                                <div class="skin-preview classic-skin">
-                                    <div class="classic-hair-full"></div>
-                                    <div class="classic-eyes">
-                                        <div class="classic-eye"></div>
-                                        <div class="classic-eye"></div>
-                                    </div>
-                                    <div class="classic-bottom-vertical">
-                                        <div class="classic-bottom-vertical-left"></div>
-                                        <div class="classic-bottom-vertical-right"></div>
-                                    </div>
-                                </div>
-                                <span class="skin-name">Volič</span>
+                                <div class="skin-preview classic-skin" style="width: 32px; height: 16px; background: #27ae60; border-radius: 8px; margin: 0 auto;"></div>
+                                <span class="skin-name">Klasický</span>
                             </div>
                             
                             <div class="skin-item" data-skin="rainbow">
                                 <div class="skin-preview rainbow-skin"></div>
                                 <span class="skin-name">Duha</span>
-                                <span class="unlock-condition">🌈 50+</span>
                             </div>
                             
                             <div class="skin-item" data-skin="neon">
                                 <div class="skin-preview neon-skin"></div>
                                 <span class="skin-name">Neon</span>
-                                <span class="unlock-condition">💡 100+</span>
                             </div>
                             
                             <div class="skin-item locked" data-skin="golden">
@@ -212,7 +240,7 @@
                         </div>
                     </div>
 
-                    <button class="game-button" onclick="startGame()">
+                    <button id="startBtn" class="game-button" onclick="startGame()">
                         ZAČÍT HRÁT
                     </button>
                     <div class="start-hint">
@@ -246,12 +274,18 @@
     <!-- Pravý panel - Historie -->
     <div class="history-container">
             <header>
-                <h2>📊 Historie skóre</h2>
+                <h2>
+                    <img src="img/history.png" alt="history" style="height: 48px; vertical-align: middle; margin-right: 12px;"> 
+                    Historie skóre
+                </h2>
             </header>
 
             <div class="history-content">
                 <div class="stats-section">
-                    <h3>🏆 Statistiky</h3>
+                    <h3>
+                        <img src="img/trophy.png" alt="Statistiky" style="height: 24px; vertical-align: middle; margin-right: 8px;">
+                        Statistiky
+                    </h3>
                     <div class="stat-item">
                         <span>Celkem her:</span>
                         <span id="total-games">0</span>
@@ -266,38 +300,57 @@
                     </div>
                 </div>
 
+                <!-- Right sidebar banner advertisement - menší verze -->
+                <div class="ad-container-sidebar-small">
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-9868306421254175"
+                         data-ad-slot="3456789012"
+                         data-ad-format="rectangle"
+                         data-full-width-responsive="false"></ins>
+                    <script>
+                         (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
+
                 <div class="achievements">
-                    <h3>🎯 Úspěchy</h3>
+                    <h3> 
+                        <img src="img/medal.png" alt="Statistiky" style="height: 24px; vertical-align: middle; margin-right: 8px;">
+                        Úspěchy
+                    </h3>
                     <div id="achievements-list" class="achievements-list">
                         <div class="achievement locked" data-achievement="first-game">
-                            <span class="achievement-icon">🎮</span>
+                            <span class="achievement-icon"><img src="img/gameBoy.png" alt="První hra"></span>
                             <span class="achievement-text">První hra</span>
                         </div>
                         <div class="achievement locked" data-achievement="score-100">
-                            <span class="achievement-icon">🌟</span>
+                            <span class="achievement-icon"><img src="img/star.png" alt="Skóre 100+"></span>
                             <span class="achievement-text">Skóre 100+</span>
                         </div>
                         <div class="achievement locked" data-achievement="score-500">
-                            <span class="achievement-icon">🔥</span>
+                            <span class="achievement-icon"><img src="img/fire.png" alt="Skóre 500+"></span>
                             <span class="achievement-text">Skóre 500+</span>
                         </div>
                         <div class="achievement locked" data-achievement="score-1000">
-                            <span class="achievement-icon">🏆</span>
+                            <span class="achievement-icon"><img src="img/trophy.png" alt="Výkon"></span>
                             <span class="achievement-text">Mistrovský<br> výkon</span>
                         </div>
                         <div class="achievement locked" data-achievement="long-snake">
-                            <span class="achievement-icon">🐍</span>
+                            <span class="achievement-icon"><img src="img/snake.png" alt="Dlouhý had"></span>
                             <span class="achievement-text">Dlouhý had <br> 25+</span>
                         </div>
                         <div class="achievement locked" data-achievement="speed-demon">
-                            <span class="achievement-icon">⚡</span>
+                            <span class="achievement-icon"><img src="img/speedReal.png" alt="Blesk"></span>
                             <span class="achievement-text">Rychlý <br>blesk</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="recent-games">
-                    <h3>🕐 Poslední hry</h3>
+                    <h3>
+                         <img src="img/time.png" alt="history" style="height: 24px; vertical-align: middle; margin-right: 12px;"> 
+                        Poslední hry
+                    </h3>
                     <div id="game-history" class="history-list">
                         <p class="no-games">Zatím žádné hry...</p>
                     </div>
@@ -308,25 +361,19 @@
 
     <!-- Game-over popup - mimo layout kontejnery -->
     <div id="game-over" class="game-over hidden">
-        <h2>Konec hry!</h2>
+        <h2>
+            <img src="img/snakeDeath.png" alt="smrt hada" class="snake-death">
+              Konec hry!
+            <img src="img/snakeDeath.png" alt="smrt hada" class="snake-death">
+        </h2>
         <p>Tvoje skóre: <span id="final-score">0</span></p>
         
         <div class="popup-skins-section">
             <h3>🎨 Změň skin pro další hru:</h3>
             <div class="popup-skins-grid" id="gameover-skins-grid">
                 <div class="skin-item active" data-skin="classic">
-                    <div class="skin-preview classic-skin">
-                        <div class="classic-hair-full"></div>
-                        <div class="classic-eyes">
-                            <div class="classic-eye"></div>
-                            <div class="classic-eye"></div>
-                        </div>
-                        <div class="classic-bottom-vertical">
-                            <div class="classic-bottom-vertical-left"></div>
-                            <div class="classic-bottom-vertical-right"></div>
-                        </div>
-                    </div>
-                    <span class="skin-name">Volič</span>
+                    <div class="skin-preview classic-skin" style="width: 32px; height: 16px; background: #27ae60; border-radius: 8px; margin: 0 auto;"></div>
+                    <span class="skin-name">Klasický</span>
                 </div>
                 
                 <div class="skin-item" data-skin="rainbow">
@@ -390,5 +437,18 @@
     <script src="js/timers.js"></script>
     <script src="js/gameLogic.js"></script>
     <script src="script.js"></script>
+    
+    <!-- Sticky bottom advertisement -->
+    <div class="ad-container-bottom">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-9868306421254175"
+             data-ad-slot="9876543210"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
 </body>
 </html>

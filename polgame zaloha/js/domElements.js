@@ -77,6 +77,7 @@ function showGameOver() {
     finalScoreElement.textContent = gameState.score;
     gameOverElement.classList.remove('hidden');
     document.body.classList.add('game-over');
+    document.body.classList.remove('game-active');
     
     // Debug: zkontroluj viditelnost kontejnerů
     setTimeout(() => {
@@ -106,6 +107,8 @@ function hideGameOver() {
 
 // Herní ovládání
 function startGame() {
+    document.body.classList.remove('game-over');
+    document.body.classList.add('game-active');
     console.log("🚀 StartGame volána!");
     
     if (!gameState.gameStarted) {

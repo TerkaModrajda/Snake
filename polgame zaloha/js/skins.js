@@ -10,6 +10,20 @@ function changeSkin(skinId) {
     }
 }
 
+// Save unlocked skins to localStorage
+function saveUnlockedSkins() {
+    const unlocked = Object.keys(snakeSkins).filter(skinId => snakeSkins[skinId].unlocked);
+    localStorage.setItem('snakeUnlockedSkins', JSON.stringify(unlocked));
+}
+
+// Load unlocked skins from localStorage
+function loadUnlockedSkins() {
+    const unlocked = JSON.parse(localStorage.getItem('snakeUnlockedSkins') || '[]');
+    unlocked.forEach(skinId => {
+        if (snakeSkins[skinId]) snakeSkins[skinId].unlocked = true;
+    });
+}
+
 // Odemknutí skinů podle skóre
 function unlockSkins(score) {
     let newUnlocks = false;
@@ -34,8 +48,28 @@ function unlockSkins(score) {
     });
     
     if (newUnlocks) {
+        saveUnlockedSkins();
         updateAllSkinGrids();
     }
+}
+
+// Always reset skins to only basic unlocked on load
+function resetBasicSkins() {
+    Object.keys(snakeSkins).forEach(skinId => {
+        if (skinId === 'classic' || skinId === 'rainbow' || skinId === 'neon') {
+            snakeSkins[skinId].unlocked = true;
+        } else {
+            snakeSkins[skinId].unlocked = false;
+        }
+    });
+    saveUnlockedSkins();
+}
+
+// Call unlockSkins with high score after each game
+if (typeof window !== 'undefined') {
+    resetBasicSkins();
+    loadUnlockedSkins();
+    window.unlockSkins = unlockSkins;
 }
 
 // Inicializace skinů UI v popup oknech

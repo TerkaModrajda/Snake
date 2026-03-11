@@ -65,9 +65,13 @@ function manageBonusEffects(deltaTime) {
 function manageMagnetEffect(currentTime) {
     if (gameState.magnetEffectActive) {
         const elapsed = currentTime - gameState.magnetEffectStartTime;
+        const remaining = GAME_CONFIG.TIMINGS.BONUS_EFFECT - elapsed;
+
+        console.log(`[MAGNET TIMER] Elapsed: ${elapsed}ms, zbývá: ${remaining}ms, limit: ${GAME_CONFIG.TIMINGS.BONUS_EFFECT}ms`);
 
         // Pokud magnet efekt vypršel, deaktivuj ho
         if (elapsed > GAME_CONFIG.TIMINGS.BONUS_EFFECT) {
+            console.log(`[MAGNET TIMER] Magnet efekt vypršel - deaktivuji`);
             deactivateMagnetEffect();
         }
     }
@@ -178,26 +182,53 @@ function generateBonus(bonusType) {
  */
 function activateBonusEffect(bonusType) {
     if (bonusType === 'frenzy') {
+        const wasAlreadyActive = gameState.frenzyActive;
+        
         startFoodFrenzy();
-        showBonusActivationMessage(bonusType);
+        
+        if (wasAlreadyActive) {
+            console.log(`[BonusManager] Frenzy efekt prodloužen - timer resetován na ${GAME_CONFIG.TIMINGS.FRENZY_DURATION / 1000}s`);
+        } else {
+            console.log(`[BonusManager] Frenzy efekt aktivován na ${GAME_CONFIG.TIMINGS.FRENZY_DURATION / 1000}s`);
+            showBonusActivationMessage(bonusType); // Zobraz notifikaci jen při novém aktivování
+        }
         return;
     }
 
     if (bonusType === 'magnet') {
+        const wasAlreadyActive = gameState.magnetEffectActive;
+        
+        // Vždy aktivuj/resetuj magnet efekt
         activateMagnetEffect();
-        showBonusActivationMessage(bonusType);
+        
+        if (wasAlreadyActive) {
+            console.log(`[BonusManager] Magnet efekt prodloužen - timer resetován na ${GAME_CONFIG.TIMINGS.BONUS_EFFECT / 1000}s`);
+        } else {
+            console.log(`[BonusManager] Magnet efekt aktivován na ${GAME_CONFIG.TIMINGS.BONUS_EFFECT / 1000}s`);
+            showBonusActivationMessage(bonusType); // Zobraz notifikaci jen při novém aktivování
+        }
         return;
     }
 
     // Standardní bonusy (slow, speed, penalty)
-    if (!gameState.bonusEffectActive) {
+    if (gameState.bonusEffectActive) {
+        // Pokud už je nějaký standardní bonus aktivní, resetuj timer
+        gameState.bonusEffectTimer = GAME_CONFIG.TIMINGS.BONUS_EFFECT;
+        applyBonusEffect(bonusType); // Aplikuj nový efekt
+        console.log(`[BonusManager] Standardní bonus efekt prodloužen/změněn na ${bonusType} - timer resetován na ${GAME_CONFIG.TIMINGS.BONUS_EFFECT / 1000}s`);
+        // Při změně typu bonusu ukaž notifikaci
+        if (gameState.lastActiveBonusType !== bonusType) {
+            showBonusActivationMessage(bonusType);
+            gameState.lastActiveBonusType = bonusType;
+        }
+    } else {
+        // Aktivuj nový standardní bonus
         gameState.bonusEffectActive = true;
         gameState.bonusEffectTimer = GAME_CONFIG.TIMINGS.BONUS_EFFECT;
-
         applyBonusEffect(bonusType);
-        showBonusActivationMessage(bonusType);
-        
+        gameState.lastActiveBonusType = bonusType;
         console.log(`[BonusManager] Efekt ${bonusType} aktivován na ${GAME_CONFIG.TIMINGS.BONUS_EFFECT / 1000}s`);
+        showBonusActivationMessage(bonusType); // Zobraz notifikaci při novém aktivování
     }
 }
 
@@ -210,17 +241,23 @@ function applyBonusEffect(bonusType) {
         case 'slow':
             gameState.speedBeforeBonus = gameState.gameSpeed;
             gameState.gameSpeed += GAME_CONFIG.SPEED.SLOW_BONUS_INCREASE;
+            console.log(`[SLOW BONUS] Rychlost změněna z ${gameState.speedBeforeBonus}ms na ${gameState.gameSpeed}ms (zpomalení o +${GAME_CONFIG.SPEED.SLOW_BONUS_INCREASE}ms)`);
             break;
             
         case 'speed':
             gameState.speedBeforeBonus = gameState.gameSpeed;
+            const oldSpeed = gameState.gameSpeed;
             gameState.gameSpeed = Math.max(gameState.gameSpeed - 50, 50);
+            console.log(`[SPEED BONUS] Rychlost změněna z ${oldSpeed}ms na ${gameState.gameSpeed}ms (zrychlení o -${oldSpeed - gameState.gameSpeed}ms)`);
             break;
             
         case 'penalty':
+            const head = gameState.snake[0];
             gameState.score = Math.max(gameState.score - 50, 0);
             shortenSnake();
             updateScore();
+            showFloatingText('-50', head.x, head.y, '#e74c3c');
+            console.log(`[PENALTY BONUS] -50 bodů, skóre změněno na ${gameState.score}`);
             break;
     }
 }
@@ -236,6 +273,7 @@ function deactivateBonusEffect() {
     
     gameState.bonusEffectActive = false;
     gameState.bonusEffectTimer = 0;
+    gameState.lastActiveBonusType = null; // Reset typu bonusu
     
     console.log("[BonusManager] Bonusový efekt deaktivován");
 }
@@ -299,7 +337,13 @@ function getBonusActivationMessage(bonusType) {
             color: '#f39c12', floatingText: 'SPEED!' 
         }
     };
-    return messages[bonusType] || messages.slow;
+    
+    if (!messages[bonusType]) {
+        console.warn(`[BONUS] Neznámý bonus typ: "${bonusType}". Dostupné typy:`, Object.keys(messages));
+        return { icon: '❓', title: 'Neznámý bonus', text: `Chybí definice pro bonus: ${bonusType}`, color: '#95a5a6', floatingText: '???' };
+    }
+    
+    return messages[bonusType];
 }
 
 // Make functions globally available

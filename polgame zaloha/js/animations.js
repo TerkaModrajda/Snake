@@ -159,14 +159,20 @@ function animateMissedFood() {
 
 // Aktivace magnet efektu - spustí průběžné přitahování
 function activateMagnetEffect() {
+    const currentTime = Date.now();
+    console.log(`[MAGNET AKTIVACE] Čas: ${currentTime}, předchozí startTime: ${gameState.magnetEffectStartTime}`);
+    
     gameState.magnetEffectActive = true;
-    gameState.magnetEffectStartTime = Date.now();
+    gameState.magnetEffectStartTime = currentTime;
     
     console.log('=== MAGNET EFEKT AKTIVOVÁN ===');
     console.log('gameState.magnetEffectActive:', gameState.magnetEffectActive);
     console.log('gameState.magnetEffectStartTime:', gameState.magnetEffectStartTime);
     console.log('GAME_CONFIG.TIMINGS.BONUS_EFFECT:', GAME_CONFIG.TIMINGS.BONUS_EFFECT);
     console.log('Magnet bude aktivní po dobu:', GAME_CONFIG.TIMINGS.BONUS_EFFECT / 1000, 'sekund');
+    
+    // Debug: Zkontroluj, jaké objekty jsou dostupné
+    console.log(`[MAGNET DEBUG] Stav objektů při aktivaci: food=${!!gameState.food}, snake.length=${gameState.snake?.length}, bonusy=${gameState.bonuses?.length}`);
 }
 
 // Deaktivace magnet efektu
@@ -177,13 +183,19 @@ function deactivateMagnetEffect() {
 
 // Průběžné přitahování jídel k hadovi (volá se každý frame)
 function updateMagnetAttraction() {
-    if (!gameState.magnetEffectActive) return;
+    if (!gameState.magnetEffectActive) {
+        // Debug: Zkontroluj, proč magnet není aktivní
+        console.log(`[MAGNET DEBUG] Magnet není aktivní. magnetEffectActive: ${gameState.magnetEffectActive}`);
+        return;
+    }
     
     const head = gameState.snake[0];
     const attractionRange = 2; // Rozmezí 4x4 (2 pole na všechny strany od hlavy)
     const elapsed = Date.now() - gameState.magnetEffectStartTime;
     
-    console.log(`MAGNET AKTIVNÍ - zbývá ${Math.ceil((GAME_CONFIG.TIMINGS.BONUS_EFFECT - elapsed) / 1000)}s, had na pozici [${head.x},${head.y}]`);
+    // Debug info s více detaily
+    console.log(`[MAGNET AKTIVNÍ] Zbývá ${Math.ceil((GAME_CONFIG.TIMINGS.BONUS_EFFECT - elapsed) / 1000)}s, had na [${head.x},${head.y}]`);
+    console.log(`[MAGNET DEBUG] Objekty ke kontrole: jídlo=${!!gameState.food}, multiFood=${gameState.multiFood && gameState.foods?.length}, superFood=${gameState.superFoodActive}, bonusy=${gameState.bonuses?.length}, frenzy=${gameState.frenzyActive && gameState.frenzyFoods?.length}`);
     
     // Přitáhni hlavní jídlo
     if (gameState.food) {
@@ -262,6 +274,58 @@ function updateMagnetAttraction() {
             animateScore();
         }
     }
+    
+    // Přitáhni všechny bonusy
+    if (gameState.bonuses && gameState.bonuses.length > 0) {
+        for (let i = gameState.bonuses.length - 1; i >= 0; i--) {
+            const originalPos = { x: gameState.bonuses[i].x, y: gameState.bonuses[i].y };
+            gameState.bonuses[i] = attractFoodToSnake(gameState.bonuses[i], head, attractionRange);
+            if (originalPos.x !== gameState.bonuses[i].x || originalPos.y !== gameState.bonuses[i].y) {
+                console.log(`Bonus ${gameState.bonuses[i].type} se pohnul z [${originalPos.x},${originalPos.y}] na [${gameState.bonuses[i].x},${gameState.bonuses[i].y}]`);
+            }
+            
+            // Okamžitá kontrola kolize po přitažení
+            if (gameState.bonuses[i].x === head.x && gameState.bonuses[i].y === head.y) {
+                console.log(`MAGNET: Bonus ${gameState.bonuses[i].type} se přitáhl přímo k hadovi - okamžitě aktivuji!`);
+                const bonusType = gameState.bonuses[i].type;
+                gameState.bonuses.splice(i, 1);
+                
+                // Aktivuj efekt bonusu okamžitě
+                if (typeof activateBonusEffect === 'function') {
+                    activateBonusEffect(bonusType);
+                }
+            }
+        }
+    }
+    
+    // Přitáhni všechna frenzy jídla
+    if (gameState.frenzyActive && gameState.frenzyFoods && gameState.frenzyFoods.length > 0) {
+        for (let i = gameState.frenzyFoods.length - 1; i >= 0; i--) {
+            const originalPos = { x: gameState.frenzyFoods[i].x, y: gameState.frenzyFoods[i].y };
+            gameState.frenzyFoods[i] = attractFoodToSnake(gameState.frenzyFoods[i], head, attractionRange);
+            if (originalPos.x !== gameState.frenzyFoods[i].x || originalPos.y !== gameState.frenzyFoods[i].y) {
+                console.log(`Frenzy jídlo ${i} se pohnulo z [${originalPos.x},${originalPos.y}] na [${gameState.frenzyFoods[i].x},${gameState.frenzyFoods[i].y}]`);
+            }
+            
+            // Okamžitá kontrola kolize po přitažení
+            if (gameState.frenzyFoods[i].x === head.x && gameState.frenzyFoods[i].y === head.y) {
+                console.log(`MAGNET: Frenzy jídlo ${i} se přitáhlo přímo k hadovi - okamžitě zpracovávám!`);
+                
+                // Odstraň snědené frenzy jídlo
+                gameState.frenzyFoods.splice(i, 1);
+                
+                // Zpracuj snědení frenzy jídla (stejná logika jako v gameLogic.js)
+                gameState.score += GAME_CONFIG.SCORING.NORMAL_FOOD;
+                gameState.foodEaten++;
+                gameState.snake.push({ x: -1, y: -1 }); // Prodlouž hada
+                updateScore();
+                showFloatingText('+10', head.x, head.y, '#2ecc71');
+                animateScore();
+                
+                console.log(`MAGNET: Frenzy jídlo snědeno! Zbývá ${gameState.frenzyFoods.length} frenzy jídel`);
+            }
+        }
+    }
 }
 
 // Funkce pro postupné přitahování jídla k hadovi (pouze v rozmezí 4x4)
@@ -300,15 +364,17 @@ function attractFoodToSnake(food, head, maxRange) {
     newX = Math.max(0, Math.min(GAME_CONFIG.CANVAS.GRID_COUNT - 1, newX));
     newY = Math.max(0, Math.min(GAME_CONFIG.CANVAS.GRID_COUNT - 1, newY));
     
-    // Pokud se jídlo přitáhne přímo na pozici hada, vrať ho na pozici hada
+    // Pokud se jídlo přitáhne přímo na pozici hada, vrať ho na pozici hada (zachovaj původní vlastnosti)
     if (newX === head.x && newY === head.y) {
         console.log('  -> Jídlo se přitáhlo přímo k hadovi!');
-        return { x: head.x, y: head.y };
+        return { ...food, x: head.x, y: head.y };
     }
     
     console.log(`  -> Nová pozice: [${newX},${newY}]`);
     
+    // Zachovej všechny původní vlastnosti objektu, změň jen pozici
     return {
+        ...food,
         x: newX,
         y: newY
     };
